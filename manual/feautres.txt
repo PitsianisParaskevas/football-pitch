@@ -1,0 +1,16 @@
+I create the footbalPitch 
+footballPitch 
+    I can pass the width  and height for the field 
+    the color Line
+    showCenterCircle
+    showCornerArcs
+    showPenatlyShots 
+    select vertical or horizontal 
+    ``3D
+
+and above that I render layer 
+    - FormationLayer 
+        this layer will redner the formation of each team 
+        I can have custom formation
+        color of each team 
+        color of GK for each team 

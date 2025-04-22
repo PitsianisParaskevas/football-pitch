@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>TEAM FORMATION</title>
+    <style>
+       
+    </style>
+</head>
+<body>
+    <h1>Draw Team Formation</h1>
+
+    <canvas id="myCanvas" width="800" height="350"></canvas>
+    
+
+    <script>
+        class FieldRenderer {
+            constructor(canvasId) {
+                this.canvas = document.getElementById(canvasId);
+                this.canvas.style.border = "1px solid #000000"; // Default border style
+                this.ctx = this.canvas.getContext("2d");
+                this.canvasWidth = this.canvas.width;
+                this.canvasHeight = this.canvas.height;
+                this.centerLevel = 14;
+                this.cornerLevel = 48;
+                this.boxAreaLevel = 25;
+                this.boxAreaHalf = 40;
+                this.fieldYard = 10;
+                this.FirstFieldColorYard = '#537855';
+                this.SecondFieldColorYard = '#446C46';
+            }
+
+            render() {
+                const rectWidth = this.canvasWidth / this.fieldYard;
+
+                // Draw alternating colored rectangles
+                for (let i = 0; i <  this.fieldYard; i++) {
+                    if (i % 2 === 0) {
+                        this.ctx.fillStyle = this.FirstFieldColorYard; // First color
+                    } else {
+                        this.ctx.fillStyle = this.SecondFieldColorYard; // Second color
+                    }
+                    this.ctx.fillRect(i * rectWidth, 0, rectWidth, this.canvasHeight);
+                }
+
+                // Center line
+                this.ctx.beginPath();
+                this.ctx.moveTo(this.canvasWidth / 2, 0);
+                this.ctx.lineTo(this.canvasWidth / 2, this.canvasHeight);
+                this.ctx.stroke();
+
+                // Center area
+                this.ctx.beginPath();
+                this.ctx.arc(this.canvasWidth / 2, this.canvasHeight / 2, this.canvasWidth / this.centerLevel, 0, 2 * Math.PI);
+                this.ctx.stroke();
+
+                // Corner areas
+                this.ctx.beginPath();
+                this.ctx.arc(0, 0, this.canvasWidth / this.cornerLevel, 0, 0.5 * Math.PI);
+                this.ctx.stroke();
+
+                this.ctx.beginPath();
+                this.ctx.arc(0, this.canvasHeight, this.canvasWidth / this.cornerLevel, 1.5 * Math.PI, 0);
+                this.ctx.stroke();
+
+                this.ctx.beginPath();
+                this.ctx.arc(this.canvasWidth, 0, this.canvasWidth / this.cornerLevel, 0.5 * Math.PI, 1 * Math.PI);
+                this.ctx.stroke();
+
+                this.ctx.beginPath();
+                this.ctx.arc(this.canvasWidth, this.canvasHeight, this.canvasWidth / this.cornerLevel, 1 * Math.PI, 1.5 * Math.PI);
+                this.ctx.stroke();
+
+                // Box areas
+                this.ctx.beginPath();
+                // Home
+                this.ctx.rect(0, (this.canvasHeight / 2) - this.boxAreaLevel, this.boxAreaLevel, this.boxAreaLevel * 2);
+                this.ctx.stroke();
+
+                this.ctx.rect(0, (this.canvasHeight / 2) - (this.boxAreaLevel * 2), this.boxAreaLevel * 2, this.boxAreaLevel * 4);
+                this.ctx.stroke();
+
+                this.ctx.beginPath();
+                this.ctx.arc(this.boxAreaLevel * 2, this.canvasHeight / 2, this.canvasWidth / this.boxAreaHalf, 1.5 * Math.PI, 0.5 * Math.PI);
+                this.ctx.stroke();
+
+                // Away
+                this.ctx.rect(this.canvasWidth - this.boxAreaLevel, this.canvasHeight / 2 - this.boxAreaLevel, this.boxAreaLevel, this.boxAreaLevel * 2);
+                this.ctx.stroke();
+
+                this.ctx.rect(this.canvasWidth - (this.boxAreaLevel * 2), this.canvasHeight / 2 - (this.boxAreaLevel * 2), this.boxAreaLevel * 2, this.boxAreaLevel * 4);
+                this.ctx.stroke();
+
+                this.ctx.beginPath();
+                this.ctx.arc(this.canvasWidth - (this.boxAreaLevel * 2), this.canvasHeight / 2, this.canvasWidth / this.boxAreaHalf, 0.5 * Math.PI, 1.5 * Math.PI);
+                this.ctx.stroke();
+            }
+        }
+
+        class FormationRenderer extends FieldRenderer {
+            
+            constructor(canvasId, formation, color, isHomeTeam) {
+                super(canvasId);
+                this.formation = formation;
+                this.color = color; 
+                this.isHomeTeam = isHomeTeam;
+            }
+
+            renderFormation() {
+                const { numAreas, areaWidth, playerWidth, playerHeight, playerPositions } = this.calculatePlayerPositions();
+
+                // Render player positions
+                this.ctx.fillStyle = this.color; // Set player color
+                for (const position of playerPositions) {
+                    this.ctx.fillRect(position.x, position.y, playerWidth, playerHeight);
+                }
+            }
+
+            calculatePlayerPositions() {
+                
+                const semiFieldWidth = this.canvasWidth / 2 ;
+                const positions = this.formation.split('-');
+                // Default position for goalkeeper 
+                positions.unshift('1');
+
+                if(!this.isHomeTeam) {
+                    positions.reverse();
+                }
+
+                const numAreas = positions.length;
+                const areaWidth = semiFieldWidth / numAreas;
+
+                const playerPositions = [];
+                const playerWidth = 20; // Adjust as needed
+                const playerHeight = 20; // Adjust as needed
+
+                const startX = this.isHomeTeam ? 0 : this.canvasWidth / 2;
+                const direction = this.isHomeTeam ? 1 : 1;
+
+                for (let i = 0; i < numAreas; i++) {
+                    const numPlayers = parseInt(positions[i]);
+                   
+                    const spaceBetweenPlayers = (this.canvasHeight - (numPlayers * playerHeight)) / (numPlayers + 1);
+                    // const xPos = areaWidth * (i + 0.1)
+                    const xPos = startX + (direction * (i * areaWidth + areaWidth / 2)) - (playerWidth / 2);
+
+
+                    for (let j = 0; j < numPlayers; j++) {
+                        // Calculate the y-coordinate for the player
+                        const yPos = (j * (playerHeight + spaceBetweenPlayers)) + spaceBetweenPlayers;
+                        playerPositions.push({ x: xPos, y: yPos });   
+                    }
+                }
+
+                return { numAreas, areaWidth, playerWidth, playerHeight, playerPositions };
+            }
+        }
+
+        
+        
+        window.addEventListener('load', () => {
+            const fieldRenderer = new FieldRenderer('myCanvas');
+            fieldRenderer.render();
+
+            // Draw player Formation 
+            const homeTeamFormation = '4-4-2';
+            const awayTeamFormation = '4-3-3';
+           
+            const formationRenderer = new FormationRenderer('myCanvas', homeTeamFormation, 'blue', true);
+            const awayformationRenderer = new FormationRenderer('myCanvas', awayTeamFormation, 'red', false);
+
+            formationRenderer.renderFormation(); // Render player positions based on the formation
+            awayformationRenderer.renderFormation(); // Render player positions based on the formation
+        });
+    </script>
+
+</body>
+</html>

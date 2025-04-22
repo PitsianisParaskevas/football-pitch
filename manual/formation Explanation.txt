@@ -1,0 +1,63 @@
+How Football Formation Rendering Works
+This document explains how we render player formations on a football pitch using a dynamic geometry-based system. The logic supports symmetrical left-to-right (home team) and right-to-left (away team) positioning, customizable spacing, and consistent placement of the goalkeeper.
+
+1. Formation Input Format
+A formation is provided as a string like: "4-4-2", "4-2-3-1", "3-4-3", etc.
+
+The formation describes the number of players per row, from defense to attack.
+
+We automatically prepend the goalkeeper (1 player), making a full 11-player setup.
+
+2. Team Direction
+isHomeTeam = true: Team is rendered left ➝ right (GK at left end).
+
+isHomeTeam = false: Team is rendered right ➝ left (GK at right end).
+
+The team is rendered within their own half (semi-width of the field).
+
+3. Geometry Logic
+The field width is split into 2 halves:
+
+Left for the home team
+
+Right for the away team
+
+We divide the semi-width into n areas, where n is the number of rows in the formation.
+
+Players are placed centered in each area, spaced vertically with even padding.
+
+Player x is calculated using:
+
+js
+Copy
+Edit
+x = startX + direction * (offsetX + i * areaWidth + areaWidth / 2) - playerWidth / 2
+direction = 1 for home team, -1 for away team.
+
+offsetX ensures horizontal centering within half-pitch.
+
+4. Player Placement
+Players in each row are stacked vertically.
+
+y position is calculated by spacing them with equal gaps.
+
+The first player is always the goalkeeper (isGK: true).
+
+All other players are isGK: false.
+
+5. Customization
+formationWidthRatio: Adjusts how wide each formation spreads in their half.
+
+teamColor, goalkeeperColor: Allows custom colors for each team or role.
+
+6. Example
+For formation="4-4-2" and isHomeTeam=true, the players are placed:
+
+GK closest to the left goal
+
+4 defenders, 4 midfielders, 2 strikers from back to front
+
+For isHomeTeam=false, same formation mirrors from the right side.
+
+This system ensures flexible, accurate formation visualization compatible with tactical views, match visualizations, or interactive lineups.
+

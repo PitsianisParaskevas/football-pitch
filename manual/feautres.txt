@@ -5,6 +5,7 @@ footballPitch
     showCenterCircle
     showCornerArcs
     showPenatlyShots 
+    
     select vertical or horizontal 
     ``3D
 

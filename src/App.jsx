@@ -1,26 +1,43 @@
 import { useState } from "react";
-import FootballPitch from "./components/FootballPitch";
+import FootballPitch from "./components/FootballPitch/FootballPitch";
 import FormationLayer from "./components/layers/Foramation/FormationLayer";
 
-const mockPlayers = [
-  { x: 10, y: 50, team: "home" },
-  { x: 30, y: 30, team: "home" },
-  { x: 30, y: 70, team: "home" },
-  { x: 70, y: 50, team: "away" },
-  { x: 90, y: 30, team: "away" },
-  { x: 90, y: 70, team: "away" },
-];
-
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
-    <>
-      <div style={{ padding: "2rem" }}>
-        <h1>Football Pitch</h1>
+    <div
+      style={{
+        padding: "2rem",
+        display: "flex",
+        gap: "2rem",
+        flexWrap: "wrap",
+      }}
+    >
+      {/* Horizontal Pitch (Default) */}
+      <div>
+        <h2>Horizontal Pitch</h2>
         <FootballPitch
           width={800}
           height={500}
+          direction="horizontal"
+          grassColor="#007A57"
+          lineColor="#032"
+          lineWidth={2}
+          showCenterCircle={true}
+          showCornerArcs={true}
+          showPenaltySpots={true}
+        >
+          <FormationLayer formation="4-4-2" isHomeTeam={true} />
+          <FormationLayer formation="4-3-3" isHomeTeam={false} />
+        </FootballPitch>
+      </div>
+
+      {/* Vertical Pitch */}
+      <div>
+        <h2>Vertical Pitch</h2>
+        <FootballPitch
+          width={500}
+          height={800}
+          direction="vertical"
           grassColor="#007A57"
           lineColor="#032"
           lineWidth={2}
@@ -29,17 +46,18 @@ function App() {
           showPenaltySpots={true}
         >
           <FormationLayer
-            formation="4-1-2-1-2"
+            formation="4-4-2"
             isHomeTeam={true}
+            direction="vertical"
           />
           <FormationLayer
-            formation="3-4-3"
+            formation="4-3-3"
             isHomeTeam={false}
-            goalkeeperColor="#000"
+            direction="vertical"
           />
         </FootballPitch>
       </div>
-    </>
+    </div>
   );
 }
 

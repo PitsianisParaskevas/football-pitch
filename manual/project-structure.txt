@@ -4,4 +4,7 @@
             -- utils
                 calculateFormationPositions.js
             FormationLayer.jsx
-    FootballPitch.jsx
+    -- FootballPitch
+        -- utils
+            calculateFootballPitch.js
+        FootballPitch.jsx

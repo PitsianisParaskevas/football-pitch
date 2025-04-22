@@ -1,47 +1,45 @@
+import { applyDirection } from '../../../FootballPitch/utils/calculateFootballPitch';
+
 export function calculateFormationPositions({
-    formation,
-    isHomeTeam = true,
-    width = 800,
-    height = 500,
-    formationWidthRatio = 1,
-  }) {
-    const rawPositions = formation.split('-').map(Number);
-    rawPositions.unshift(1); // Add GK
-  
-    const semiWidth = width / 2;
-    const usableWidth = semiWidth * formationWidthRatio;
-    const offsetX = (semiWidth - usableWidth) / 2;
-  
-    const startX = isHomeTeam ? 0 : width;
-    const direction = isHomeTeam ? 1 : -1;
-  
-    const playerWidth = 20;
-    const playerHeight = 20;
-  
-    const numAreas = rawPositions.length;
-    const areaWidth = usableWidth / numAreas;
-  
-    const playerPositions = [];
-  
-    let playerIndex = 0;
-  
-    for (let i = 0; i < numAreas; i++) {
-      const numPlayers = rawPositions[i];
-      const spaceBetween = (height - numPlayers * playerHeight) / (numPlayers + 1);
-      const x =
-        startX + direction * (offsetX + i * areaWidth + areaWidth / 2) - playerWidth / 2;
-  
-      for (let j = 0; j < numPlayers; j++) {
-        const y = (j * (playerHeight + spaceBetween)) + spaceBetween;
-        playerPositions.push({
-          x,
-          y,
-          isGK: playerIndex === 0,
-        });
-        playerIndex++;
-      }
+  formation,
+  isHomeTeam = true,
+  width = 800,
+  height = 500,
+  direction = "horizontal",
+  formationWidthRatio = 1
+}) {
+  const positions = formation.split('-').map(Number);
+  positions.unshift(1); // Add GK
+
+  if (!isHomeTeam) positions.reverse();
+
+  const pitchLength = direction === "horizontal" ? width : height;
+  const pitchWidth = direction === "horizontal" ? height : width;
+
+  const semiLength = pitchLength / 2;
+  const usableLength = semiLength * formationWidthRatio;
+  const offsetX = (semiLength - usableLength) / 2;
+  const startX = isHomeTeam ? 0 : pitchLength / 2;
+
+  const playerWidth = 20;
+  const playerHeight = 20;
+
+  const numAreas = positions.length;
+  const areaWidth = usableLength / numAreas;
+
+  const playerPositions = [];
+
+  for (let i = 0; i < numAreas; i++) {
+    const numPlayers = positions[i];
+    const spaceBetween = (pitchWidth - numPlayers * playerHeight) / (numPlayers + 1);
+    const x = startX + offsetX + (i * areaWidth + areaWidth / 2) - playerWidth / 2;
+
+    for (let j = 0; j < numPlayers; j++) {
+      const y = (j * (playerHeight + spaceBetween)) + spaceBetween;
+      const p = applyDirection(x, y, direction, pitchLength, pitchWidth);
+      playerPositions.push({ x: p.x, y: p.y });
     }
-  
-    return playerPositions;
   }
-  
+
+  return playerPositions;
+}

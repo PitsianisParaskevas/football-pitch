@@ -1,5 +1,5 @@
-import React from 'react';
-import { calculateFormationPositions } from './utils/calculateFormationPositions';
+import React from "react";
+import { calculateFormationPositions } from "./utils/calculateFormationPositions";
 
 const FormationLayer = ({
   formation,
@@ -8,6 +8,7 @@ const FormationLayer = ({
   goalkeeperColor,
   width = 800,
   height = 500,
+  direction,
   formationWidthRatio = 1,
 }) => {
   const players = calculateFormationPositions({
@@ -15,11 +16,12 @@ const FormationLayer = ({
     isHomeTeam,
     width,
     height,
+    direction,
     formationWidthRatio,
   });
 
-  const defaultTeamColor = isHomeTeam ? 'blue' : 'red';
-  const defaultGKColor = isHomeTeam ? 'darkblue' : 'darkred';
+  const defaultTeamColor = isHomeTeam ? "blue" : "red";
+  const defaultGKColor = isHomeTeam ? "darkblue" : "darkred";
 
   const fieldColor = teamColor || defaultTeamColor;
   const gkColor = goalkeeperColor || defaultGKColor;

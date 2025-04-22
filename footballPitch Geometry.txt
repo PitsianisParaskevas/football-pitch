@@ -1,0 +1,80 @@
+Football Pitch Geometry Overview
+
+This document explains the geometry and layout of a standard football pitch rendered using SVG in a React component.
+
+---
+
+1. Canvas Size
+- width: 800 pixels
+- height: 500 pixels
+- These dimensions define the drawing area for the entire football pitch.
+
+---
+
+2. Field Outline
+- Drawn as a rectangle from (0, 0) to (800, 500)
+- Represents the boundary of the pitch
+
+---
+
+3. Semi-Fields
+- The pitch is visually divided by a center line
+- centerX = width / 2 = 400
+- The left and right halves represent each team's field side
+
+---
+
+4. Center Line
+- A vertical line from (400, 0) to (400, 500)
+
+---
+
+5. Center Circle
+- Center at (400, 250)
+- Radius: 60px
+- A small circle of radius 3px is also drawn at the center spot
+
+---
+
+6. Corner Arcs
+- Radius: 12px
+- Arcs are drawn at all four corners of the pitch using SVG path
+- Top-left: Arc from (0, 12) to (12, 0)
+- Top-right: Arc from (788, 0) to (800, 12)
+- Bottom-left: Arc from (0, 488) to (12, 500)
+- Bottom-right: Arc from (788, 500) to (800, 488)
+
+---
+
+7. Big Area (Penalty Area)
+- Width: 120px
+- Height: 300px
+- Left side: starts at (0, 100)
+- Right side: starts at (680, 100)
+
+---
+
+8. Small Area (Goal Box)
+- Width: 40px
+- Height: 160px
+- Left side: starts at (0, 170)
+- Right side: starts at (760, 170)
+
+---
+
+9. Goalposts
+- Depth: 10px
+- Height: 60px
+- Left goal: drawn outside pitch from (-10, 220) to (0, 280)
+- Right goal: drawn from (800, 220) to (810, 280)
+
+---
+
+10. Penalty Spots
+- Radius: 3px
+- Left penalty spot: (80, 250)
+- Right penalty spot: (720, 250)
+
+---
+
+This geometry is scaled for a digital visualization, not a real-world size ratio, and can be mapped to normalized coordinates (0-100) for data overlays like formations, heatmaps, or shot locations.

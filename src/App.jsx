@@ -1,6 +1,12 @@
 import { useState } from "react";
 import FootballPitch from "./components/FootballPitch/FootballPitch";
 import FormationLayer from "./components/layers/Foramation/FormationLayer";
+import HeatmapLayer from "./components/layers/HeatMap/HeatmapLayer";
+
+import heatmapData from "./components/layers/HeatMap/data/heatmap.json";
+
+// https://www.sofascore.com/football/match/cagliari-fiorentina/Tdbsueb#id:13797484
+// Lucas Beltran heatmap
 
 function App() {
   return (
@@ -26,13 +32,22 @@ function App() {
           showCornerArcs={true}
           showPenaltySpots={true}
         >
-          <FormationLayer formation="4-4-2" isHomeTeam={true} />
-          <FormationLayer formation="4-3-3" isHomeTeam={false} />
+          <HeatmapLayer
+            data={heatmapData.heatmap}
+            width={800}
+            height={500}
+            direction="horizontal"
+            color="orange"
+            radius={10}
+            opacity={0.4}
+          />
+          {/* <FormationLayer formation="4-4-2" isHomeTeam={true} />
+          <FormationLayer formation="4-3-3" isHomeTeam={false} /> */}
         </FootballPitch>
       </div>
 
       {/* Vertical Pitch */}
-      <div>
+      {/* <div>
         <h2>Vertical Pitch</h2>
         <FootballPitch
           width={500}
@@ -56,7 +71,7 @@ function App() {
             direction="vertical"
           />
         </FootballPitch>
-      </div>
+      </div> */}
     </div>
   );
 }

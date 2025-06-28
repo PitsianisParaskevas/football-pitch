@@ -32,7 +32,7 @@ function App() {
           showCornerArcs={true}
           showPenaltySpots={true}
         >
-          <HeatmapLayer
+          {/* <HeatmapLayer
             data={heatmapData.heatmap}
             width={800}
             height={500}
@@ -40,9 +40,9 @@ function App() {
             color="orange"
             radius={10}
             opacity={0.4}
-          />
-          {/* <FormationLayer formation="4-4-2" isHomeTeam={true} />
-          <FormationLayer formation="4-3-3" isHomeTeam={false} /> */}
+          /> */}
+          <FormationLayer formation="4-4-2" isHomeTeam={true} />
+          <FormationLayer formation="4-3-3" isHomeTeam={false} />
         </FootballPitch>
       </div>
 

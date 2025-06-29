@@ -1,34 +1,30 @@
 import React from "react";
 import { getScaledPitchDimensions } from "./utils/getScaledPitchDimensions";
-import { applyDirection } from "./utils/applyDirection";
 import { getPitchDirection } from "./utils/getPitchDirection";
 
 export default function DrawPitch({
   width = 800,
   height = 500,
   direction = "horizontal",
-  grassColor = "#4CAF50",
+  grassColor = "#007A57",
   lineColor = "#fff",
   lineWidth = 2,
-  showCenterLine = true,
-  showCenterCircle = true,
-  showCornerArcs = true,
-  showPenaltySpots = true,
-  showPenaltyArea = true,
+  showGoalPost = false,
   showGoalArea = true,
-  showGoalposts = true,
+  showPenaltyArea = true,
+  showPenaltySpot = true,
+  showPenaltyArc = true,
+  showCornerArc = true,
+  showHalfWayLine = true,
+  showCenterCircle = true,
+  showCenterPoint = true,
+  circleRadius = 4,
   children,
 }) {
   const dimensions = getScaledPitchDimensions(width, height);
   const directions = getPitchDirection(dimensions);
 
-  console.log("directions", directions);
-
   const pitch = {
-    picht: {
-      type: "rect",
-      dimension: [dimensions.TOUCH_LINE, dimensions.GOAL_LINE],
-    },
     goalPost: {
       type: "rect",
       dimension: dimensions.GOAL_POST,
@@ -39,7 +35,7 @@ export default function DrawPitch({
       dimension: dimensions.GOAL_AREA,
       direction: directions.GOAL_AREA,
     },
-    penatlyArea: {
+    penaltyArea: {
       type: "rect",
       dimension: dimensions.PENALTY_AREA,
       direction: directions.PENALTY_AREA,
@@ -49,13 +45,8 @@ export default function DrawPitch({
       dimension: dimensions.PENALTY_SPOT,
       direction: directions.PENALTY_SPOT,
     },
-    penaltyArc: {
-      type: "circle",
-      dimension: dimensions.PENATLY_ARC,
-      direction: "",
-    },
     cornerArc: {
-      type: "circle",
+      type: "path",
       dimension: dimensions.CORNER_ARC,
       direction: directions.CORNER_ARC,
     },
@@ -76,11 +67,11 @@ export default function DrawPitch({
     },
   };
 
-  console.log("pitch:", pitch);
+  console.log("pitch", pitch);
 
   return (
     <svg width={width} height={height} style={{ backgroundColor: grassColor }}>
-      {/* Pitch Outline */}
+      {/* Outline */}
       <rect
         x={0}
         y={0}
@@ -90,103 +81,100 @@ export default function DrawPitch({
         fill="none"
         strokeWidth={lineWidth}
       />
-      <rect
-        width={pitch.goalArea.dimension[0]}
-        height={pitch.goalArea.dimension[1]}
-        x={pitch.goalArea.direction.home[0]}
-        y={pitch.goalArea.direction.home[1]}
-        // y={250 - pitch.goalArea.dimension[1] / 2 }
-        stroke={lineColor}
-        fill="none"
-        strokeWidth={lineWidth}
-      />
 
-      <circle
-        cx={pitch.penaltySpot.direction.home[0]}
-        cy={pitch.penaltySpot.direction.home[1]}
-        r={4}
-        stroke={lineColor}
-        fill={lineColor}
-        strokeWidth={lineWidth}
-      />
+      {/* Goal Posts */}
+      {showGoalPost && (
+        <>
+          <rect
+            width={pitch.goalPost.dimension[0]}
+            height={pitch.goalPost.dimension[1]}
+            x={pitch.goalPost.direction.home[0]}
+            y={pitch.goalPost.direction.home[1]}
+            stroke={lineColor}
+            fill="none"
+            strokeWidth={lineWidth}
+          />
+          <rect
+            width={pitch.goalPost.dimension[0]}
+            height={pitch.goalPost.dimension[1]}
+            x={pitch.goalPost.direction.away[0]}
+            y={pitch.goalPost.direction.away[1]}
+            stroke={lineColor}
+            fill="none"
+            strokeWidth={lineWidth}
+          />
+        </>
+      )}
 
-      <rect
-        width={pitch.penatlyArea.dimension[0]}
-        height={pitch.penatlyArea.dimension[1]}
-        x={pitch.penatlyArea.direction.home[0]}
-        y={pitch.penatlyArea.direction.home[1]}
-        stroke={lineColor}
-        fill="none"
-        strokeWidth={lineWidth}
-      />
+      {/* Goal Areas */}
+      {showGoalArea && (
+        <>
+          <rect
+            width={pitch.goalArea.dimension[0]}
+            height={pitch.goalArea.dimension[1]}
+            x={pitch.goalArea.direction.home[0]}
+            y={pitch.goalArea.direction.home[1]}
+            stroke={lineColor}
+            fill="none"
+            strokeWidth={lineWidth}
+          />
+          <rect
+            width={pitch.goalArea.dimension[0]}
+            height={pitch.goalArea.dimension[1]}
+            x={pitch.goalArea.direction.away[0]}
+            y={pitch.goalArea.direction.away[1]}
+            stroke={lineColor}
+            fill="none"
+            strokeWidth={lineWidth}
+          />
+        </>
+      )}
 
-      {/* Away */}
-      <rect
-        width={pitch.goalPost.dimension[0]}
-        height={pitch.goalPost.dimension[1]}
-        x={pitch.goalPost.direction.away[0]}
-        y={pitch.goalPost.direction.away[1]}
-        stroke="#000"
-        fill="none"
-        strokeWidth={lineWidth}
-      />
+      {/* Penalty Areas */}
+      {showPenaltyArea && (
+        <>
+          <rect
+            width={pitch.penaltyArea.dimension[0]}
+            height={pitch.penaltyArea.dimension[1]}
+            x={pitch.penaltyArea.direction.home[0]}
+            y={pitch.penaltyArea.direction.home[1]}
+            stroke={lineColor}
+            fill="none"
+            strokeWidth={lineWidth}
+          />
+          <rect
+            width={pitch.penaltyArea.dimension[0]}
+            height={pitch.penaltyArea.dimension[1]}
+            x={pitch.penaltyArea.direction.away[0]}
+            y={pitch.penaltyArea.direction.away[1]}
+            stroke={lineColor}
+            fill="none"
+            strokeWidth={lineWidth}
+          />
+        </>
+      )}
 
-      <circle
-        cx={pitch.penaltySpot.direction.away[0]}
-        cy={pitch.penaltySpot.direction.away[1]}
-        r={4}
-        fill={"#000"}
-        strokeWidth={lineWidth}
-      />
+      {/* Penalty Spots */}
+      {showPenaltySpot && (
+        <>
+          <circle
+            cx={pitch.penaltySpot.direction.home[0]}
+            cy={pitch.penaltySpot.direction.home[1]}
+            r={circleRadius}
+            fill={lineColor}
+          />
+          <circle
+            cx={pitch.penaltySpot.direction.away[0]}
+            cy={pitch.penaltySpot.direction.away[1]}
+            r={circleRadius}
+            fill={lineColor}
+          />
+        </>
+      )}
 
-      <rect
-        width={pitch.goalArea.dimension[0]}
-        height={pitch.goalArea.dimension[1]}
-        x={pitch.goalArea.direction.away[0]}
-        y={pitch.goalArea.direction.away[1]}
-        stroke="#000"
-        fill="none"
-        strokeWidth={lineWidth}
-      />
 
-      <rect
-        width={pitch.penatlyArea.dimension[0]}
-        height={pitch.penatlyArea.dimension[1]}
-        x={pitch.penatlyArea.direction.away[0]}
-        y={pitch.penatlyArea.direction.away[1]}
-        stroke="#000"
-        fill="none"
-        strokeWidth={lineWidth}
-      />
-
-      <line
-        x1={pitch.halfWayLine.direction.x1} // width / 2
-        y1={pitch.halfWayLine.direction.y1} // 0
-        x2={pitch.halfWayLine.direction.x2} // width / 2
-        y2={pitch.halfWayLine.direction.y2} // height
-        stroke="#fc0303"
-        strokeWidth={lineWidth}
-      />
-
-      <circle
-        cx={pitch.centerCircle.direction[0]}
-        cy={pitch.centerCircle.direction[1]}
-        r={pitch.centerCircle.dimension}
-        stroke={lineColor}
-        fill="none"
-        strokeWidth={lineWidth}
-      />
-
-      <circle
-        cx={pitch.centerPoint.direction[0]}
-        cy={pitch.centerPoint.direction[1]}
-        r={4}
-        stroke={lineColor}
-        fill={lineColor}
-        strokeWidth={lineWidth}
-      />
-
-      {showCornerArcs &&
+      {/* Corner Arcs */}
+      {showCornerArc &&
         pitch.cornerArc.direction.map((d, i) => (
           <path
             key={i}
@@ -196,6 +184,65 @@ export default function DrawPitch({
             strokeWidth={lineWidth}
           />
         ))}
+
+      {/* Halfway Line */}
+      {showHalfWayLine && (
+        <line
+          x1={pitch.halfWayLine.direction.x1}
+          y1={pitch.halfWayLine.direction.y1}
+          x2={pitch.halfWayLine.direction.x2}
+          y2={pitch.halfWayLine.direction.y2}
+          stroke={lineColor}
+          strokeWidth={lineWidth}
+        />
+      )}
+
+      {/* Center Circle */}
+      {showCenterCircle && (
+        <circle
+          cx={pitch.centerCircle.direction[0]}
+          cy={pitch.centerCircle.direction[1]}
+          r={pitch.centerCircle.dimension}
+          stroke={lineColor}
+          fill="none"
+          strokeWidth={lineWidth}
+        />
+      )}
+
+      {showCenterPoint && (
+        <circle
+          cx={pitch.centerPoint.direction[0]}
+          cy={pitch.centerPoint.direction[1]}
+          r={circleRadius}
+          fill={lineColor}
+        />
+      )}
+
+      {/* Children (layers) */}
+      {children}
     </svg>
   );
 }
+
+// const cx = pitch.penaltyArc.dimension + 7.35;
+// const cy = 250;
+// const r = pitch.penaltyArc.dimension;
+
+// // Convert degrees to radians
+// const startAngle = (225 * Math.PI) / 180;
+// const endAngle = (315 * Math.PI) / 180;
+
+// // Start point (x0, y0)
+// const x0 = cx + r * Math.cos(startAngle);
+// const y0 = cy + r * Math.sin(startAngle);
+
+// // End point (x1, y1)
+// const x1 = cx + r * Math.cos(endAngle);
+// const y1 = cy + r * Math.sin(endAngle);
+
+// <path
+//   d={`M ${x0} ${y0} A ${r} ${r} 0 0 1 ${x1} ${y1}`}
+//   stroke={lineColor}
+//   fill="none"
+//   strokeWidth={lineWidth}
+// />

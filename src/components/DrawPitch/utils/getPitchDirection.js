@@ -2,8 +2,6 @@ export function getPitchDirection(dimensions) {
   const x = dimensions.TOUCH_LINE;
   const y = dimensions.GOAL_LINE;
 
-  console.log("getPitchDirection", dimensions);
-
   return {
     GOAL_POST: {
       home: [0, y / 2 - dimensions.GOAL_POST[1] / 2],

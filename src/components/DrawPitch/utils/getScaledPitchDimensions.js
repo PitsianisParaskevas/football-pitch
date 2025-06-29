@@ -28,9 +28,6 @@ export function getScaledPitchDimensions(svgWidth, svgHeight) {
   const scaleX = svgWidth / standardPitch.TOUCH_LINE;
   const scaleY = svgHeight / standardPitch.GOAL_LINE;
 
-  // const width = scaleX.toFixed(2);
-  // const height = scaleY.toFixed(2);
-
   return {
     TOUCH_LINE: standardPitch.TOUCH_LINE * scaleX,
     GOAL_LINE: standardPitch.GOAL_LINE * scaleY,
@@ -49,7 +46,6 @@ export function getScaledPitchDimensions(svgWidth, svgHeight) {
       standardPitch.PENALTY_AREA[0] * scaleX,
       standardPitch.PENALTY_AREA[1] * scaleY,
     ],
-
     PENALTY_SPOT: standardPitch.PENALTY_SPOT * scaleX,
     PENATLY_ARC: standardPitch.PENATLY_ARC * scaleX,
     CORNER_ARC: standardPitch.CORNER_ARC * scaleX,

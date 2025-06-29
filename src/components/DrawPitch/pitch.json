@@ -1,0 +1,127 @@
+{
+    "picht": {
+        "type": "rect",
+        "dimension": [
+            800,
+            500
+        ]
+    },
+    "goalPost": {
+        "type": "rect",
+        "dimension": [
+            15.238095238095237,
+            58.8235294117647
+        ],
+        "direction": {
+            "home": [
+                0,
+                220.58823529411765
+            ],
+            "away": [
+                784.7619047619048,
+                220.58823529411765
+            ]
+        }
+    },
+    "goalArea": {
+        "type": "rect",
+        "dimension": [
+            45.71428571428571,
+            147.05882352941177
+        ],
+        "direction": {
+            "home": [
+                0,
+                176.47058823529412
+            ],
+            "away": [
+                754.2857142857143,
+                176.47058823529412
+            ]
+        }
+    },
+    "penatlyArea": {
+        "type": "rect",
+        "dimension": [
+            137.14285714285714,
+            323.52941176470586
+        ],
+        "direction": {
+            "home": [
+                0,
+                88.23529411764707
+            ],
+            "away": [
+                662.8571428571429,
+                88.23529411764707
+            ]
+        }
+    },
+    "penaltySpot": {
+        "type": "circle",
+        "dimension": 7.619047619047619,
+        "direction": {
+            "home": [
+                11,
+                250
+            ],
+            "away": [
+                789,
+                250
+            ]
+        }
+    },
+    "penaltyArc": {
+        "type": "circle",
+        "dimension": 76.19047619047619,
+        "direction": ""
+    },
+    "cornerArc": {
+        "type": "circle",
+        "dimension": 41.904761904761905,
+        "direction": [
+            [
+                0,
+                0
+            ],
+            [
+                800,
+                0
+            ],
+            [
+                0,
+                500
+            ],
+            [
+                800,
+                500
+            ]
+        ]
+    },
+    "halfWayLine": {
+        "type": "line",
+        "dimension": 500,
+        "": {
+            "x1": 400,
+            "y1": 0,
+            "x2": 400,
+            "y2": 500
+        }
+    },
+    "centerCircle": {
+        "type": "circle",
+        "dimension": 76.19047619047619,
+        "direction": [
+            400,
+            250
+        ]
+    },
+    "centerPoint": {
+        "type": "circle",
+        "dimension": 7.619047619047619,
+        "direction": [
+            400,
+            250
+        ]
+    }
+}

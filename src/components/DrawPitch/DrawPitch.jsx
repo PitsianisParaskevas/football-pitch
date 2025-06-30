@@ -9,7 +9,9 @@ export default function DrawPitch({
   grassColor = "#007A57",
   lineColor = "#fff",
   lineWidth = 2,
-  showGoalPost = false,
+  goalPostWidth = 5,
+  goalPostColor = "#000",
+  showGoalPost = true,
   showGoalArea = true,
   showPenaltyArea = true,
   showPenaltySpot = true,
@@ -23,6 +25,24 @@ export default function DrawPitch({
 }) {
   const dimensions = getScaledPitchDimensions(width, height);
   const directions = getPitchDirection(dimensions);
+
+  function polarToCartesian(cx, cy, r, angleInRadians) {
+    return {
+      x: cx + r * Math.cos(angleInRadians),
+      y: cy + r * Math.sin(angleInRadians),
+    };
+  }
+
+  function describeArc(x, y, radius, startAngle, endAngle, flip = false) {
+    const start = polarToCartesian(x, y, radius, endAngle);
+    const end = polarToCartesian(x, y, radius, startAngle);
+
+    const largeArcFlag = endAngle - startAngle <= Math.PI ? "0" : "1";
+    const sweepFlag = flip ? "0" : "1";
+
+    return `M ${start.x} ${start.y}
+          A ${radius} ${radius} 0 ${largeArcFlag} ${sweepFlag} ${end.x} ${end.y}`;
+  }
 
   const pitch = {
     goalPost: {
@@ -86,21 +106,19 @@ export default function DrawPitch({
       {showGoalPost && (
         <>
           <rect
-            width={pitch.goalPost.dimension[0]}
+            width={goalPostWidth}
             height={pitch.goalPost.dimension[1]}
             x={pitch.goalPost.direction.home[0]}
             y={pitch.goalPost.direction.home[1]}
-            stroke={lineColor}
-            fill="none"
+            fill={goalPostColor}
             strokeWidth={lineWidth}
           />
           <rect
-            width={pitch.goalPost.dimension[0]}
+            width={goalPostWidth}
             height={pitch.goalPost.dimension[1]}
-            x={pitch.goalPost.direction.away[0]}
+            x={width - goalPostWidth}
             y={pitch.goalPost.direction.away[1]}
-            stroke={lineColor}
-            fill="none"
+            fill={goalPostColor}
             strokeWidth={lineWidth}
           />
         </>
@@ -171,7 +189,6 @@ export default function DrawPitch({
           />
         </>
       )}
-
 
       {/* Corner Arcs */}
       {showCornerArc &&

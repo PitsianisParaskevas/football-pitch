@@ -26,23 +26,6 @@ export default function DrawPitch({
   const dimensions = getScaledPitchDimensions(width, height);
   const directions = getPitchDirection(dimensions);
 
-  function polarToCartesian(cx, cy, r, angleInRadians) {
-    return {
-      x: cx + r * Math.cos(angleInRadians),
-      y: cy + r * Math.sin(angleInRadians),
-    };
-  }
-
-  function describeArc(x, y, radius, startAngle, endAngle, flip = false) {
-    const start = polarToCartesian(x, y, radius, endAngle);
-    const end = polarToCartesian(x, y, radius, startAngle);
-
-    const largeArcFlag = endAngle - startAngle <= Math.PI ? "0" : "1";
-    const sweepFlag = flip ? "0" : "1";
-
-    return `M ${start.x} ${start.y}
-          A ${radius} ${radius} 0 ${largeArcFlag} ${sweepFlag} ${end.x} ${end.y}`;
-  }
 
   const pitch = {
     goalPost: {

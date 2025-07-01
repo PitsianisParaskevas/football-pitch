@@ -14,7 +14,7 @@ function App() {
       <Demo />
 
       <h2>Vertical</h2>
-      <Demo direction="vertical" />
+      <Demo orientation="vertical" />
     </div>
   );
 }

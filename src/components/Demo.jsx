@@ -2,10 +2,10 @@ export default function Demo({
   direction = "horizontal",
   grassColor = "#007A57",
   lineColor = "#fff",
-  lineWidth = 2,
+  lineWidth = 1,
   goalPostWidth = 5,
   goalPostColor = "#000",
-  circleRadius = 2,
+  circleRadius = 1,
   cornerR = 1,
   children,
 }) {
@@ -68,6 +68,44 @@ export default function Demo({
         ${standardPitch.PENALTY_AREA[0]} ${midY + standardPitch.PENATLY_ARC}
         `,
     },
+    // Away
+    goalAreaAway: {
+      type: "rect",
+      dimention: [standardPitch.GOAL_AREA[0], standardPitch.GOAL_AREA[1]],
+      direction: [
+        axisX - standardPitch.GOAL_AREA[0],
+        midY - standardPitch.GOAL_AREA[1] / 2,
+      ],
+    },
+    penatlySpotAway: {
+      type: "circle",
+      dimention: circleRadius,
+      direction: [axisX - standardPitch.PENALTY_SPOT, midY],
+    },
+    penaltyAreaAway: {
+      type: "rect",
+      dimention: [standardPitch.PENALTY_AREA[0], standardPitch.PENALTY_AREA[1]],
+      direction: [
+        axisX - standardPitch.PENALTY_AREA[0],
+        midY - standardPitch.PENALTY_AREA[1] / 2,
+      ],
+    },
+    penaltyArcAway: {
+      type: "path",
+      dimention: cornerR,
+      direction: `        
+        M  
+         ${axisX - standardPitch.PENALTY_AREA[0]} 
+         ${midY - standardPitch.PENATLY_ARC}
+        A
+         ${standardPitch.PENATLY_ARC} 
+         ${standardPitch.PENATLY_ARC}
+         0 1 0 
+         ${axisX - standardPitch.PENALTY_AREA[0]} 
+         ${midY + standardPitch.PENATLY_ARC}        
+        `,
+    },
+    // Center
     halfwayLine: {
       type: "line",
       dimention: lineWidth,
@@ -83,6 +121,7 @@ export default function Demo({
       dimention: standardPitch.CENTER_CIRCLE,
       direction: [midX, midY],
     },
+    // Corner
     cornerArc: {
       type: "path",
       dimention: cornerR,
@@ -121,6 +160,7 @@ export default function Demo({
       dimention: [width, height],
       direction: [0, 0],
     },
+    // Home
     goalAreaHome: {
       type: "rect",
       dimention: [standardPitch.GOAL_AREA[1], standardPitch.GOAL_AREA[0]],
@@ -146,6 +186,44 @@ export default function Demo({
          ${midX - standardPitch.PENATLY_ARC} ${standardPitch.PENALTY_AREA[0]}
         `,
     },
+    // Away
+    goalAreaAway: {
+      type: "rect",
+      dimention: [standardPitch.GOAL_AREA[1], standardPitch.GOAL_AREA[0]],
+      direction: [
+        midX - standardPitch.GOAL_AREA[1] / 2,
+        axisY - standardPitch.GOAL_AREA[0],
+      ],
+    },
+    penatlySpotAway: {
+      type: "circle",
+      dimention: circleRadius,
+      direction: [midX, axisY - standardPitch.PENALTY_SPOT],
+    },
+    penaltyAreaAway: {
+      type: "rect",
+      dimention: [standardPitch.PENALTY_AREA[1], standardPitch.PENALTY_AREA[0]],
+      direction: [
+        midX - standardPitch.PENALTY_AREA[1] / 2,
+        axisY - standardPitch.PENALTY_AREA[0],
+      ],
+    },
+    penaltyArcAway: {
+      type: "path",
+      dimention: cornerR,
+      direction: `
+        M 
+         ${midX + standardPitch.PENATLY_ARC} 
+         ${axisY - standardPitch.PENALTY_AREA[0]}
+        A 
+         ${standardPitch.PENATLY_ARC} 
+         ${standardPitch.PENATLY_ARC}
+         0 0 0 
+         ${midX - standardPitch.PENATLY_ARC} 
+         ${axisY - standardPitch.PENALTY_AREA[0]}
+        `,
+    },
+    // Center
     halfwayLine: {
       type: "line",
       dimention: lineWidth,
@@ -161,6 +239,7 @@ export default function Demo({
       dimention: standardPitch.CENTER_CIRCLE,
       direction: [midX, midY],
     },
+    // Corner
     cornerArc: {
       type: "path",
       dimention: cornerR,
@@ -241,11 +320,46 @@ export default function Demo({
 
       <path
         d={footpitch.penaltyArcHome.direction}
-        stroke={"#fff"}
+        stroke={lineColor}
         fill="none"
         strokeWidth={footpitch.penaltyArcHome.dimention}
       />
 
+      {/* Away */}
+      <rect
+        width={footpitch.goalAreaAway.dimention[0]}
+        height={footpitch.goalAreaAway.dimention[1]}
+        x={footpitch.goalAreaAway.direction[0]}
+        y={footpitch.goalAreaAway.direction[1]}
+        stroke={lineColor}
+        fill="none"
+        strokeWidth={lineWidth}
+      />
+
+      <rect
+        width={footpitch.penaltyAreaAway.dimention[0]}
+        height={footpitch.penaltyAreaAway.dimention[1]}
+        x={footpitch.penaltyAreaAway.direction[0]}
+        y={footpitch.penaltyAreaAway.direction[1]}
+        stroke={lineColor}
+        fill="none"
+        strokeWidth={lineWidth}
+      />
+
+      <circle
+        cx={footpitch.penatlySpotAway.direction[0]}
+        cy={footpitch.penatlySpotAway.direction[1]}
+        r={footpitch.penatlySpotAway.dimention}
+        fill={lineColor}
+      />
+
+      <path
+        d={footpitch.penaltyArcAway.direction}
+        stroke={lineColor}
+        fill="none"
+        strokeWidth={footpitch.penaltyArcAway.dimention}
+      />
+      
       {/* Half */}
 
       <line
@@ -301,8 +415,6 @@ export default function Demo({
         fill="none"
         strokeWidth={footpitch.cornerArc.direction}
       />
-
-      {/* Away */}
     </svg>
   );
 }

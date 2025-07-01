@@ -6,7 +6,7 @@ const standardPitch = {
   PENALTY_AREA: [18, 44],
   PENALTY_SPOT_RADIUS: 0.5,
   PENALTY_SPOT: 12,
-  PENALTY_ARC: 10,
+  PENALTY_ARC: 6,
   CORNER_ARC: 1,
   CENTER_CIRCLE: 10,
 };
@@ -25,6 +25,7 @@ export default function Demo({
 }) {
   const scaleWidth = width / standardPitch.TOUCH_LINE;
   const scaleHeight = height / standardPitch.GOAL_LINE;
+  const angle = (60 * Math.PI) / 180;
 
   const scalePitch = {
     TOUCH_LINE: scaleWidth * standardPitch.TOUCH_LINE,
@@ -92,11 +93,9 @@ export default function Demo({
       position: `
       M  
       ${scalePitch.PENALTY_AREA[0]} 
-      ${
-        midY - scalePitch.PENALTY_ARC
-      }
+      ${midY - scalePitch.PENALTY_ARC}
          A
-        ${scalePitch.PENALTY_ARC} ${scalePitch.PENALTY_ARC}
+        ${(scalePitch.PENALTY_ARC / Math.PI) * 2} ${scalePitch.PENALTY_ARC}
          0 1 1 
         ${scalePitch.PENALTY_AREA[0]} ${midY + scalePitch.PENALTY_ARC}
         `,
@@ -139,7 +138,7 @@ export default function Demo({
          ${axisX - scalePitch.PENALTY_AREA[0]} 
          ${midY - scalePitch.PENALTY_ARC}
         A
-         ${scalePitch.PENALTY_ARC} 
+         ${(scalePitch.PENALTY_ARC / Math.PI) * 2} 
          ${scalePitch.PENALTY_ARC}
          0 1 0 
          ${axisX - scalePitch.PENALTY_AREA[0]} 
@@ -227,7 +226,7 @@ export default function Demo({
       size: cornerR,
       position: `
         M ${midX + scalePitch.PENALTY_ARC} ${scalePitch.PENALTY_AREA[0]}
-        A ${scalePitch.PENALTY_ARC} ${scalePitch.PENALTY_ARC}
+        A ${scalePitch.PENALTY_ARC} ${(scalePitch.PENALTY_ARC / Math.PI) * 2}
          0 0 1 
          ${midX - scalePitch.PENALTY_ARC} ${scalePitch.PENALTY_AREA[0]}
         `,
@@ -271,7 +270,7 @@ export default function Demo({
          ${axisY - scalePitch.PENALTY_AREA[0]}
         A 
          ${scalePitch.PENALTY_ARC} 
-         ${scalePitch.PENALTY_ARC}
+         ${(scalePitch.PENALTY_ARC / Math.PI) * 2}
          0 0 0 
          ${midX - scalePitch.PENALTY_ARC} 
          ${axisY - scalePitch.PENALTY_AREA[0]}

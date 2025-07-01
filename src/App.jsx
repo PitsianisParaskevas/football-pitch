@@ -7,7 +7,7 @@ import "./App.css"; // ✅ Corrected import
 function App() {
   return (
     <div style={{ padding: "2rem" }}>
-      <DrawPitch orientation="vertical" width="400" height="300" />
+      <DrawPitch width="400" height="300" />
     </div>
   );
 }

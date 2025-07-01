@@ -18,8 +18,7 @@ export default function DrawPitch({
   grassColor = "#007A57",
   lineColor = "#fff",
   lineWidth = 1,
-  goalPostColor = "#000",
-  circleRadius = 5,
+  goalPostColor = "#fff",
   cornerR = 1,
   children,
 }) {
@@ -348,8 +347,8 @@ export default function DrawPitch({
         height={footpitch.goalPostHome.size[1]}
         x={footpitch.goalPostHome.position[0]}
         y={footpitch.goalPostHome.position[1]}
-        stroke={"#000"}
         strokeWidth={lineWidth}
+        fill={goalPostColor}
       />
       <rect
         width={footpitch.goalAreaHome.size[0]}
@@ -391,7 +390,7 @@ export default function DrawPitch({
         height={footpitch.goalPostAway.size[1]}
         x={footpitch.goalPostAway.position[0]}
         y={footpitch.goalPostAway.position[1]}
-        stroke={"#000"}
+        fill={goalPostColor}
         strokeWidth={lineWidth}
       />
       <rect

@@ -1,248 +1,471 @@
-import React from "react";
-import { getScaledPitchDimensions } from "./utils/getScaledPitchDimensions";
-import { getPitchDirection } from "./utils/getPitchDirection";
+const standardPitch = {
+  TOUCH_LINE: 105,
+  GOAL_LINE: 68,
+  GOAL_POST: [1, 8],
+  GOAL_AREA: [6, 20],
+  PENALTY_AREA: [18, 44],
+  PENALTY_SPOT_RADIUS: 0.5,
+  PENALTY_SPOT: 12,
+  PENALTY_ARC: 6,
+  CORNER_ARC: 1,
+  CENTER_CIRCLE: 10,
+};
 
 export default function DrawPitch({
-  width = 800,
-  height = 500,
-  direction = "horizontal",
+  width = "800",
+  height = "500",
+  orientation = "horizontal",
   grassColor = "#007A57",
   lineColor = "#fff",
-  lineWidth = 2,
-  goalPostWidth = 5,
+  lineWidth = 1,
   goalPostColor = "#000",
-  showGoalPost = true,
-  showGoalArea = true,
-  showPenaltyArea = true,
-  showPenaltySpot = true,
-  showPenaltyArc = true,
-  showCornerArc = true,
-  showHalfWayLine = true,
-  showCenterCircle = true,
-  showCenterPoint = true,
-  circleRadius = 4,
+  circleRadius = 5,
+  cornerR = 1,
   children,
 }) {
-  const dimensions = getScaledPitchDimensions(width, height);
-  const directions = getPitchDirection(dimensions);
+  const scaleWidth = width / standardPitch.TOUCH_LINE;
+  const scaleHeight = height / standardPitch.GOAL_LINE;
+  const angle = (60 * Math.PI) / 180;
 
+  const scalePitch = {
+    TOUCH_LINE: scaleWidth * standardPitch.TOUCH_LINE,
+    GOAL_LINE: scaleHeight * standardPitch.GOAL_LINE,
+    GOAL_POST: [
+      scaleWidth * standardPitch.GOAL_POST[0],
+      scaleHeight * standardPitch.GOAL_POST[1],
+    ],
+    GOAL_AREA: [
+      scaleWidth * standardPitch.GOAL_AREA[0],
+      scaleHeight * standardPitch.GOAL_AREA[1],
+    ],
+    PENALTY_AREA: [
+      scaleWidth * standardPitch.PENALTY_AREA[0],
+      scaleHeight * standardPitch.PENALTY_AREA[1],
+    ],
+    PENALTY_SPOT_RADIUS: scaleWidth * standardPitch.PENALTY_SPOT_RADIUS,
+    PENALTY_SPOT: scaleWidth * standardPitch.PENALTY_SPOT,
+    PENALTY_ARC: scaleWidth * standardPitch.PENALTY_ARC,
+    CENTER_CIRCLE: scaleWidth * standardPitch.CENTER_CIRCLE,
+    CORNER_ARC: scaleWidth * standardPitch.CORNER_ARC,
+  };
 
-  const pitch = {
-    goalPost: {
+  console.log("scalePitch", scalePitch);
+
+  const orientWidth =
+    orientation === "horizontal" ? scalePitch.TOUCH_LINE : scalePitch.GOAL_LINE;
+  const orientHeight =
+    orientation === "horizontal" ? scalePitch.GOAL_LINE : scalePitch.TOUCH_LINE;
+
+  const axisX = orientWidth;
+  const axisY = orientHeight;
+  const midX = axisX / 2;
+  const midY = axisY / 2;
+
+  const footpitchHorizontal = {
+    pitch: {
       type: "rect",
-      dimension: dimensions.GOAL_POST,
-      direction: directions.GOAL_POST,
+      size: [width, height],
+      position: [0, 0],
     },
-    goalArea: {
+    goalPostHome: {
       type: "rect",
-      dimension: dimensions.GOAL_AREA,
-      direction: directions.GOAL_AREA,
+      size: [scalePitch.GOAL_POST[0], scalePitch.GOAL_POST[1]],
+      position: [0, midY - scalePitch.GOAL_POST[1] / 2],
     },
-    penaltyArea: {
+    goalAreaHome: {
       type: "rect",
-      dimension: dimensions.PENALTY_AREA,
-      direction: directions.PENALTY_AREA,
+      size: [scalePitch.GOAL_AREA[0], scalePitch.GOAL_AREA[1]],
+      position: [0, midY - scalePitch.GOAL_AREA[1] / 2],
     },
-    penaltySpot: {
+    penaltySpotHome: {
       type: "circle",
-      dimension: dimensions.PENALTY_SPOT,
-      direction: directions.PENALTY_SPOT,
+      size: scalePitch.PENALTY_SPOT_RADIUS,
+      position: [scalePitch.PENALTY_SPOT, midY],
     },
-    cornerArc: {
+    penaltyAreaHome: {
+      type: "rect",
+      size: [scalePitch.PENALTY_AREA[0], scalePitch.PENALTY_AREA[1]],
+      position: [0, midY - scalePitch.PENALTY_AREA[1] / 2],
+    },
+    penaltyArcHome: {
       type: "path",
-      dimension: dimensions.CORNER_ARC,
-      direction: directions.CORNER_ARC,
+      size: cornerR,
+      position: `
+      M  
+      ${scalePitch.PENALTY_AREA[0]} 
+      ${midY - scalePitch.PENALTY_ARC}
+         A
+        ${(scalePitch.PENALTY_ARC / Math.PI) * 2} ${scalePitch.PENALTY_ARC}
+         0 1 1 
+        ${scalePitch.PENALTY_AREA[0]} ${midY + scalePitch.PENALTY_ARC}
+        `,
     },
-    halfWayLine: {
-      type: "line",
-      dimension: dimensions.HALFWAY_LINE,
-      direction: directions.HALFWAY_LINE,
+    // Away
+    goalPostAway: {
+      type: "rect",
+      size: [scalePitch.GOAL_POST[0], scalePitch.GOAL_POST[1]],
+      position: [
+        axisX - scalePitch.GOAL_POST[0],
+        midY - scalePitch.GOAL_POST[1] / 2,
+      ],
     },
-    centerCircle: {
+    goalAreaAway: {
+      type: "rect",
+      size: [scalePitch.GOAL_AREA[0], scalePitch.GOAL_AREA[1]],
+      position: [
+        axisX - scalePitch.GOAL_AREA[0],
+        midY - scalePitch.GOAL_AREA[1] / 2,
+      ],
+    },
+    penaltySpotAway: {
       type: "circle",
-      dimension: dimensions.CENTER_CIRCLE,
-      direction: directions.CENTER_CIRCLE,
+      size: scalePitch.PENALTY_SPOT_RADIUS,
+      position: [axisX - scalePitch.PENALTY_SPOT, midY],
+    },
+    penaltyAreaAway: {
+      type: "rect",
+      size: [scalePitch.PENALTY_AREA[0], scalePitch.PENALTY_AREA[1]],
+      position: [
+        axisX - scalePitch.PENALTY_AREA[0],
+        midY - scalePitch.PENALTY_AREA[1] / 2,
+      ],
+    },
+    penaltyArcAway: {
+      type: "path",
+      size: cornerR,
+      position: `        
+        M  
+         ${axisX - scalePitch.PENALTY_AREA[0]} 
+         ${midY - scalePitch.PENALTY_ARC}
+        A
+         ${(scalePitch.PENALTY_ARC / Math.PI) * 2} 
+         ${scalePitch.PENALTY_ARC}
+         0 1 0 
+         ${axisX - scalePitch.PENALTY_AREA[0]} 
+         ${midY + scalePitch.PENALTY_ARC}        
+        `,
+    },
+    // Center
+    halfwayLine: {
+      type: "line",
+      size: lineWidth,
+      position: [midX, 0, midX, axisY],
     },
     centerPoint: {
       type: "circle",
-      dimension: dimensions.CENTER_POINT,
-      direction: directions.CENTER_POINT,
+      size: scalePitch.PENALTY_SPOT_RADIUS,
+      position: [midX, midY],
+    },
+    centerCircle: {
+      type: "circle",
+      size: scalePitch.CENTER_CIRCLE,
+      position: [midX, midY],
+    },
+    // Corner
+    cornerArc: {
+      type: "path",
+      size: cornerR,
+      position: [
+        // top-left
+        `M 0 ${scalePitch.CORNER_ARC} 
+         A ${scalePitch.CORNER_ARC} ${scalePitch.CORNER_ARC} 
+         0 0 0 
+         ${scalePitch.CORNER_ARC} 0
+        `,
+        // bottom-left
+        `M 0 ${axisY - scalePitch.CORNER_ARC} 
+         A ${scalePitch.CORNER_ARC} ${scalePitch.CORNER_ARC} 
+         0 0 1 
+         ${scalePitch.CORNER_ARC} ${axisY}
+        `,
+        // top-right
+        `M ${axisX - scalePitch.CORNER_ARC} 0 
+         A ${scalePitch.CORNER_ARC} ${scalePitch.CORNER_ARC} 
+         0 0 0 
+         ${axisX} ${scalePitch.CORNER_ARC}
+        `,
+        // bottom-right
+        `M ${axisX - scalePitch.CORNER_ARC} ${axisY} 
+         A ${scalePitch.CORNER_ARC} ${scalePitch.CORNER_ARC} 
+         0 0 1 
+         ${axisX} ${axisY - scalePitch.CORNER_ARC}
+        `,
+      ],
     },
   };
 
-  console.log("pitch", pitch);
+  const footpitchVertical = {
+    pitch: {
+      type: "rect",
+      size: [width, height],
+      position: [0, 0],
+    },
+    // Home
+    goalPostHome: {
+      type: "rect",
+      size: [scalePitch.GOAL_POST[1], scalePitch.GOAL_POST[0]],
+      position: [midX - scalePitch.GOAL_POST[1] / 2, 0],
+    },
+    goalAreaHome: {
+      type: "rect",
+      size: [scalePitch.GOAL_AREA[1], scalePitch.GOAL_AREA[0]],
+      position: [midX - scalePitch.GOAL_AREA[1] / 2, 0],
+    },
+    penaltySpotHome: {
+      type: "circle",
+      size: scalePitch.PENALTY_SPOT_RADIUS,
+      position: [midX, scalePitch.PENALTY_SPOT],
+    },
+    penaltyAreaHome: {
+      type: "rect",
+      size: [scalePitch.PENALTY_AREA[1], scalePitch.PENALTY_AREA[0]],
+      position: [midX - scalePitch.PENALTY_AREA[1] / 2, 0],
+    },
+    penaltyArcHome: {
+      type: "path",
+      size: cornerR,
+      position: `
+        M ${midX + scalePitch.PENALTY_ARC} ${scalePitch.PENALTY_AREA[0]}
+        A ${scalePitch.PENALTY_ARC} ${(scalePitch.PENALTY_ARC / Math.PI) * 2}
+         0 0 1 
+         ${midX - scalePitch.PENALTY_ARC} ${scalePitch.PENALTY_AREA[0]}
+        `,
+    },
+    // Away
+    goalPostAway: {
+      type: "rect",
+      size: [scalePitch.GOAL_POST[1], scalePitch.GOAL_POST[0]],
+      position: [
+        midX - scalePitch.GOAL_POST[1] / 2,
+        axisY - scalePitch.GOAL_POST[0],
+      ],
+    },
+    goalAreaAway: {
+      type: "rect",
+      size: [scalePitch.GOAL_AREA[1], scalePitch.GOAL_AREA[0]],
+      position: [
+        midX - scalePitch.GOAL_AREA[1] / 2,
+        axisY - scalePitch.GOAL_AREA[0],
+      ],
+    },
+    penaltySpotAway: {
+      type: "circle",
+      size: scalePitch.PENALTY_SPOT_RADIUS,
+      position: [midX, axisY - scalePitch.PENALTY_SPOT],
+    },
+    penaltyAreaAway: {
+      type: "rect",
+      size: [scalePitch.PENALTY_AREA[1], scalePitch.PENALTY_AREA[0]],
+      position: [
+        midX - scalePitch.PENALTY_AREA[1] / 2,
+        axisY - scalePitch.PENALTY_AREA[0],
+      ],
+    },
+    penaltyArcAway: {
+      type: "path",
+      size: cornerR,
+      position: `
+        M 
+         ${midX + scalePitch.PENALTY_ARC} 
+         ${axisY - scalePitch.PENALTY_AREA[0]}
+        A 
+         ${scalePitch.PENALTY_ARC} 
+         ${(scalePitch.PENALTY_ARC / Math.PI) * 2}
+         0 0 0 
+         ${midX - scalePitch.PENALTY_ARC} 
+         ${axisY - scalePitch.PENALTY_AREA[0]}
+        `,
+    },
+    // Center
+    halfwayLine: {
+      type: "line",
+      size: lineWidth,
+      position: [0, midY, axisY, midY],
+    },
+    centerPoint: {
+      type: "circle",
+      size: scalePitch.PENALTY_SPOT_RADIUS,
+      position: [midX, midY],
+    },
+    centerCircle: {
+      type: "circle",
+      size: scalePitch.CENTER_CIRCLE,
+      position: [midX, midY],
+    },
+    // Corner
+    cornerArc: {
+      type: "path",
+      size: cornerR,
+      position: [
+        // top-left
+        `M 0 ${scalePitch.CORNER_ARC} 
+         A ${scalePitch.CORNER_ARC} ${scalePitch.CORNER_ARC} 
+         0 0 0 
+         ${scalePitch.CORNER_ARC} 0
+        `,
+        // bottom-left
+        `M 0 ${axisY - scalePitch.CORNER_ARC} 
+         A ${scalePitch.CORNER_ARC} ${scalePitch.CORNER_ARC} 
+         0 0 1 
+         ${scalePitch.CORNER_ARC} ${axisY}
+        `,
+        // top-right
+        `M ${axisX - scalePitch.CORNER_ARC} 0 
+         A ${scalePitch.CORNER_ARC} ${scalePitch.CORNER_ARC} 
+         0 0 0 
+         ${axisX} ${scalePitch.CORNER_ARC}
+        `,
+        // bottom-right
+        `M ${axisX - scalePitch.CORNER_ARC} ${axisY} 
+         A ${scalePitch.CORNER_ARC} ${scalePitch.CORNER_ARC} 
+         0 0 1 
+         ${axisX} ${axisY - scalePitch.CORNER_ARC}
+        `,
+      ],
+    },
+  };
+
+  const footpitch =
+    orientation === "horizontal" ? footpitchHorizontal : footpitchVertical;
 
   return (
-    <svg width={width} height={height} style={{ backgroundColor: grassColor }}>
+    <svg width={axisX} height={axisY} style={{ backgroundColor: grassColor }}>
       {/* Outline */}
       <rect
-        x={0}
-        y={0}
-        width={width}
-        height={height}
+        width={footpitch.pitch.size[0]}
+        height={footpitch.pitch.size[1]}
+        x={footpitch.pitch.size[0]}
+        y={footpitch.pitch.size[1]}
         stroke={lineColor}
         fill="none"
         strokeWidth={lineWidth}
       />
 
-      {/* Goal Posts */}
-      {showGoalPost && (
-        <>
-          <rect
-            width={goalPostWidth}
-            height={pitch.goalPost.dimension[1]}
-            x={pitch.goalPost.direction.home[0]}
-            y={pitch.goalPost.direction.home[1]}
-            fill={goalPostColor}
-            strokeWidth={lineWidth}
-          />
-          <rect
-            width={goalPostWidth}
-            height={pitch.goalPost.dimension[1]}
-            x={width - goalPostWidth}
-            y={pitch.goalPost.direction.away[1]}
-            fill={goalPostColor}
-            strokeWidth={lineWidth}
-          />
-        </>
-      )}
+      {/* Areas */}
+      {/* Home */}
+      <rect
+        width={footpitch.goalPostHome.size[0]}
+        height={footpitch.goalPostHome.size[1]}
+        x={footpitch.goalPostHome.position[0]}
+        y={footpitch.goalPostHome.position[1]}
+        stroke={"#000"}
+        strokeWidth={lineWidth}
+      />
+      <rect
+        width={footpitch.goalAreaHome.size[0]}
+        height={footpitch.goalAreaHome.size[1]}
+        x={footpitch.goalAreaHome.position[0]}
+        y={footpitch.goalAreaHome.position[1]}
+        stroke={lineColor}
+        fill="none"
+        strokeWidth={lineWidth}
+      />
 
-      {/* Goal Areas */}
-      {showGoalArea && (
-        <>
-          <rect
-            width={pitch.goalArea.dimension[0]}
-            height={pitch.goalArea.dimension[1]}
-            x={pitch.goalArea.direction.home[0]}
-            y={pitch.goalArea.direction.home[1]}
-            stroke={lineColor}
-            fill="none"
-            strokeWidth={lineWidth}
-          />
-          <rect
-            width={pitch.goalArea.dimension[0]}
-            height={pitch.goalArea.dimension[1]}
-            x={pitch.goalArea.direction.away[0]}
-            y={pitch.goalArea.direction.away[1]}
-            stroke={lineColor}
-            fill="none"
-            strokeWidth={lineWidth}
-          />
-        </>
-      )}
+      <rect
+        width={footpitch.penaltyAreaHome.size[0]}
+        height={footpitch.penaltyAreaHome.size[1]}
+        x={footpitch.penaltyAreaHome.position[0]}
+        y={footpitch.penaltyAreaHome.position[1]}
+        stroke={lineColor}
+        fill="none"
+        strokeWidth={lineWidth}
+      />
 
-      {/* Penalty Areas */}
-      {showPenaltyArea && (
-        <>
-          <rect
-            width={pitch.penaltyArea.dimension[0]}
-            height={pitch.penaltyArea.dimension[1]}
-            x={pitch.penaltyArea.direction.home[0]}
-            y={pitch.penaltyArea.direction.home[1]}
-            stroke={lineColor}
-            fill="none"
-            strokeWidth={lineWidth}
-          />
-          <rect
-            width={pitch.penaltyArea.dimension[0]}
-            height={pitch.penaltyArea.dimension[1]}
-            x={pitch.penaltyArea.direction.away[0]}
-            y={pitch.penaltyArea.direction.away[1]}
-            stroke={lineColor}
-            fill="none"
-            strokeWidth={lineWidth}
-          />
-        </>
-      )}
+      <circle
+        cx={footpitch.penaltySpotHome.position[0]}
+        cy={footpitch.penaltySpotHome.position[1]}
+        r={footpitch.penaltySpotHome.size}
+        fill={lineColor}
+      />
 
-      {/* Penalty Spots */}
-      {showPenaltySpot && (
-        <>
-          <circle
-            cx={pitch.penaltySpot.direction.home[0]}
-            cy={pitch.penaltySpot.direction.home[1]}
-            r={circleRadius}
-            fill={lineColor}
-          />
-          <circle
-            cx={pitch.penaltySpot.direction.away[0]}
-            cy={pitch.penaltySpot.direction.away[1]}
-            r={circleRadius}
-            fill={lineColor}
-          />
-        </>
-      )}
+      <path
+        d={footpitch.penaltyArcHome.position}
+        stroke={lineColor}
+        fill="none"
+        strokeWidth={footpitch.penaltyArcHome.size}
+      />
 
-      {/* Corner Arcs */}
-      {showCornerArc &&
-        pitch.cornerArc.direction.map((d, i) => (
-          <path
-            key={i}
-            d={d}
-            stroke={lineColor}
-            fill="none"
-            strokeWidth={lineWidth}
-          />
-        ))}
+      {/* Away */}
+      <rect
+        width={footpitch.goalPostAway.size[0]}
+        height={footpitch.goalPostAway.size[1]}
+        x={footpitch.goalPostAway.position[0]}
+        y={footpitch.goalPostAway.position[1]}
+        stroke={"#000"}
+        strokeWidth={lineWidth}
+      />
+      <rect
+        width={footpitch.goalAreaAway.size[0]}
+        height={footpitch.goalAreaAway.size[1]}
+        x={footpitch.goalAreaAway.position[0]}
+        y={footpitch.goalAreaAway.position[1]}
+        stroke={lineColor}
+        fill="none"
+        strokeWidth={lineWidth}
+      />
 
-      {/* Halfway Line */}
-      {showHalfWayLine && (
-        <line
-          x1={pitch.halfWayLine.direction.x1}
-          y1={pitch.halfWayLine.direction.y1}
-          x2={pitch.halfWayLine.direction.x2}
-          y2={pitch.halfWayLine.direction.y2}
-          stroke={lineColor}
-          strokeWidth={lineWidth}
-        />
-      )}
+      <rect
+        width={footpitch.penaltyAreaAway.size[0]}
+        height={footpitch.penaltyAreaAway.size[1]}
+        x={footpitch.penaltyAreaAway.position[0]}
+        y={footpitch.penaltyAreaAway.position[1]}
+        stroke={lineColor}
+        fill="none"
+        strokeWidth={lineWidth}
+      />
 
-      {/* Center Circle */}
-      {showCenterCircle && (
-        <circle
-          cx={pitch.centerCircle.direction[0]}
-          cy={pitch.centerCircle.direction[1]}
-          r={pitch.centerCircle.dimension}
+      <circle
+        cx={footpitch.penaltySpotAway.position[0]}
+        cy={footpitch.penaltySpotAway.position[1]}
+        r={footpitch.penaltySpotAway.size}
+        fill={lineColor}
+      />
+
+      <path
+        d={footpitch.penaltyArcAway.position}
+        stroke={lineColor}
+        fill="none"
+        strokeWidth={footpitch.penaltyArcAway.size}
+      />
+
+      {/* Half */}
+
+      <line
+        x1={footpitch.halfwayLine.position[0]}
+        y1={footpitch.halfwayLine.position[1]}
+        x2={footpitch.halfwayLine.position[2]}
+        y2={footpitch.halfwayLine.position[3]}
+        strokeWidth={footpitch.halfwayLine.size}
+        stroke={lineColor}
+      />
+
+      <circle
+        cx={footpitch.centerPoint.position[0]}
+        cy={footpitch.centerPoint.position[1]}
+        r={footpitch.centerPoint.size}
+        fill={lineColor}
+      />
+
+      <circle
+        cx={footpitch.centerCircle.position[0]}
+        cy={footpitch.centerCircle.position[1]}
+        r={footpitch.centerCircle.size}
+        stroke={lineColor}
+        fill="none"
+      />
+
+      {/* Corner */}
+
+      {footpitch.cornerArc.position.map((pathData, i) => (
+        <path
+          key={`corner-${i}`}
+          d={pathData}
           stroke={lineColor}
           fill="none"
-          strokeWidth={lineWidth}
+          strokeWidth={footpitch.cornerArc.size}
         />
-      )}
-
-      {showCenterPoint && (
-        <circle
-          cx={pitch.centerPoint.direction[0]}
-          cy={pitch.centerPoint.direction[1]}
-          r={circleRadius}
-          fill={lineColor}
-        />
-      )}
-
-      {/* Children (layers) */}
+      ))}
       {children}
     </svg>
   );
 }
-
-// const cx = pitch.penaltyArc.dimension + 7.35;
-// const cy = 250;
-// const r = pitch.penaltyArc.dimension;
-
-// // Convert degrees to radians
-// const startAngle = (225 * Math.PI) / 180;
-// const endAngle = (315 * Math.PI) / 180;
-
-// // Start point (x0, y0)
-// const x0 = cx + r * Math.cos(startAngle);
-// const y0 = cy + r * Math.sin(startAngle);
-
-// // End point (x1, y1)
-// const x1 = cx + r * Math.cos(endAngle);
-// const y1 = cy + r * Math.sin(endAngle);
-
-// <path
-//   d={`M ${x0} ${y0} A ${r} ${r} 0 0 1 ${x1} ${y1}`}
-//   stroke={lineColor}
-//   fill="none"
-//   strokeWidth={lineWidth}
-// />

@@ -5,15 +5,16 @@ import HeatmapLayer from "./components/layers/HeatMap/HeatmapLayer";
 import heatmapData from "./components/layers/HeatMap/data/heatmap.json";
 import Vertical from "./components/Vertical/Vertical";
 import "./App.css"; // ✅ Corrected import
+import Demo from "./components/Demo";
 
 function App() {
   return (
     <div style={{ padding: "2rem" }}>
       <h2>Custom Football Pitch</h2>
-      <DrawPitch width={800} height={500} />
+      <Demo />
 
       <h2>Vertical</h2>
-      <Vertical direction="vertical" />
+      <Demo direction="vertical" />
     </div>
   );
 }

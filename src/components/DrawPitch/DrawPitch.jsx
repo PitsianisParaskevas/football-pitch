@@ -1,3 +1,8 @@
+import React, { createContext } from "react";
+
+// Create the context
+export const PitchContext = createContext(null);
+
 const standardPitch = {
   TOUCH_LINE: 105,
   GOAL_LINE: 68,
@@ -24,7 +29,6 @@ export default function DrawPitch({
 }) {
   const scaleWidth = width / standardPitch.TOUCH_LINE;
   const scaleHeight = height / standardPitch.GOAL_LINE;
-  const angle = (60 * Math.PI) / 180;
 
   const scalePitch = {
     TOUCH_LINE: scaleWidth * standardPitch.TOUCH_LINE,
@@ -328,143 +332,154 @@ export default function DrawPitch({
     orientation === "horizontal" ? footpitchHorizontal : footpitchVertical;
 
   return (
-    <svg width={axisX} height={axisY} style={{ backgroundColor: grassColor }}>
-      {/* Outline */}
-      <rect
-        width={footpitch.pitch.size[0]}
-        height={footpitch.pitch.size[1]}
-        x={footpitch.pitch.size[0]}
-        y={footpitch.pitch.size[1]}
-        stroke={lineColor}
-        fill="none"
-        strokeWidth={lineWidth}
-      />
-
-      {/* Areas */}
-      {/* Home */}
-      <rect
-        width={footpitch.goalPostHome.size[0]}
-        height={footpitch.goalPostHome.size[1]}
-        x={footpitch.goalPostHome.position[0]}
-        y={footpitch.goalPostHome.position[1]}
-        strokeWidth={lineWidth}
-        fill={goalPostColor}
-      />
-      <rect
-        width={footpitch.goalAreaHome.size[0]}
-        height={footpitch.goalAreaHome.size[1]}
-        x={footpitch.goalAreaHome.position[0]}
-        y={footpitch.goalAreaHome.position[1]}
-        stroke={lineColor}
-        fill="none"
-        strokeWidth={lineWidth}
-      />
-
-      <rect
-        width={footpitch.penaltyAreaHome.size[0]}
-        height={footpitch.penaltyAreaHome.size[1]}
-        x={footpitch.penaltyAreaHome.position[0]}
-        y={footpitch.penaltyAreaHome.position[1]}
-        stroke={lineColor}
-        fill="none"
-        strokeWidth={lineWidth}
-      />
-
-      <circle
-        cx={footpitch.penaltySpotHome.position[0]}
-        cy={footpitch.penaltySpotHome.position[1]}
-        r={footpitch.penaltySpotHome.size}
-        fill={lineColor}
-      />
-
-      <path
-        d={footpitch.penaltyArcHome.position}
-        stroke={lineColor}
-        fill="none"
-        strokeWidth={footpitch.penaltyArcHome.size}
-      />
-
-      {/* Away */}
-      <rect
-        width={footpitch.goalPostAway.size[0]}
-        height={footpitch.goalPostAway.size[1]}
-        x={footpitch.goalPostAway.position[0]}
-        y={footpitch.goalPostAway.position[1]}
-        fill={goalPostColor}
-        strokeWidth={lineWidth}
-      />
-      <rect
-        width={footpitch.goalAreaAway.size[0]}
-        height={footpitch.goalAreaAway.size[1]}
-        x={footpitch.goalAreaAway.position[0]}
-        y={footpitch.goalAreaAway.position[1]}
-        stroke={lineColor}
-        fill="none"
-        strokeWidth={lineWidth}
-      />
-
-      <rect
-        width={footpitch.penaltyAreaAway.size[0]}
-        height={footpitch.penaltyAreaAway.size[1]}
-        x={footpitch.penaltyAreaAway.position[0]}
-        y={footpitch.penaltyAreaAway.position[1]}
-        stroke={lineColor}
-        fill="none"
-        strokeWidth={lineWidth}
-      />
-
-      <circle
-        cx={footpitch.penaltySpotAway.position[0]}
-        cy={footpitch.penaltySpotAway.position[1]}
-        r={footpitch.penaltySpotAway.size}
-        fill={lineColor}
-      />
-
-      <path
-        d={footpitch.penaltyArcAway.position}
-        stroke={lineColor}
-        fill="none"
-        strokeWidth={footpitch.penaltyArcAway.size}
-      />
-
-      {/* Half */}
-
-      <line
-        x1={footpitch.halfwayLine.position[0]}
-        y1={footpitch.halfwayLine.position[1]}
-        x2={footpitch.halfwayLine.position[2]}
-        y2={footpitch.halfwayLine.position[3]}
-        strokeWidth={footpitch.halfwayLine.size}
-        stroke={lineColor}
-      />
-
-      <circle
-        cx={footpitch.centerPoint.position[0]}
-        cy={footpitch.centerPoint.position[1]}
-        r={footpitch.centerPoint.size}
-        fill={lineColor}
-      />
-
-      <circle
-        cx={footpitch.centerCircle.position[0]}
-        cy={footpitch.centerCircle.position[1]}
-        r={footpitch.centerCircle.size}
-        stroke={lineColor}
-        fill="none"
-      />
-
-      {/* Corner */}
-
-      {footpitch.cornerArc.position.map((pathData, i) => (
-        <path
-          key={`corner-${i}`}
-          d={pathData}
+    <PitchContext.Provider
+      value={{
+        width,
+        height,
+        orientation,
+        axisX,
+        axisY,
+        scalePitch,
+      }}
+    >
+      <svg width={axisX} height={axisY} style={{ backgroundColor: grassColor }}>
+        {/* Outline */}
+        <rect
+          width={footpitch.pitch.size[0]}
+          height={footpitch.pitch.size[1]}
+          x={footpitch.pitch.size[0]}
+          y={footpitch.pitch.size[1]}
           stroke={lineColor}
           fill="none"
-          strokeWidth={footpitch.cornerArc.size}
+          strokeWidth={lineWidth}
         />
-      ))}
-      {children}
-    </svg>
+
+        {/* Areas */}
+        {/* Home */}
+        <rect
+          width={footpitch.goalPostHome.size[0]}
+          height={footpitch.goalPostHome.size[1]}
+          x={footpitch.goalPostHome.position[0]}
+          y={footpitch.goalPostHome.position[1]}
+          strokeWidth={lineWidth}
+          fill={goalPostColor}
+        />
+        <rect
+          width={footpitch.goalAreaHome.size[0]}
+          height={footpitch.goalAreaHome.size[1]}
+          x={footpitch.goalAreaHome.position[0]}
+          y={footpitch.goalAreaHome.position[1]}
+          stroke={lineColor}
+          fill="none"
+          strokeWidth={lineWidth}
+        />
+
+        <rect
+          width={footpitch.penaltyAreaHome.size[0]}
+          height={footpitch.penaltyAreaHome.size[1]}
+          x={footpitch.penaltyAreaHome.position[0]}
+          y={footpitch.penaltyAreaHome.position[1]}
+          stroke={lineColor}
+          fill="none"
+          strokeWidth={lineWidth}
+        />
+
+        <circle
+          cx={footpitch.penaltySpotHome.position[0]}
+          cy={footpitch.penaltySpotHome.position[1]}
+          r={footpitch.penaltySpotHome.size}
+          fill={lineColor}
+        />
+
+        <path
+          d={footpitch.penaltyArcHome.position}
+          stroke={lineColor}
+          fill="none"
+          strokeWidth={footpitch.penaltyArcHome.size}
+        />
+
+        {/* Away */}
+        <rect
+          width={footpitch.goalPostAway.size[0]}
+          height={footpitch.goalPostAway.size[1]}
+          x={footpitch.goalPostAway.position[0]}
+          y={footpitch.goalPostAway.position[1]}
+          fill={goalPostColor}
+          strokeWidth={lineWidth}
+        />
+        <rect
+          width={footpitch.goalAreaAway.size[0]}
+          height={footpitch.goalAreaAway.size[1]}
+          x={footpitch.goalAreaAway.position[0]}
+          y={footpitch.goalAreaAway.position[1]}
+          stroke={lineColor}
+          fill="none"
+          strokeWidth={lineWidth}
+        />
+
+        <rect
+          width={footpitch.penaltyAreaAway.size[0]}
+          height={footpitch.penaltyAreaAway.size[1]}
+          x={footpitch.penaltyAreaAway.position[0]}
+          y={footpitch.penaltyAreaAway.position[1]}
+          stroke={lineColor}
+          fill="none"
+          strokeWidth={lineWidth}
+        />
+
+        <circle
+          cx={footpitch.penaltySpotAway.position[0]}
+          cy={footpitch.penaltySpotAway.position[1]}
+          r={footpitch.penaltySpotAway.size}
+          fill={lineColor}
+        />
+
+        <path
+          d={footpitch.penaltyArcAway.position}
+          stroke={lineColor}
+          fill="none"
+          strokeWidth={footpitch.penaltyArcAway.size}
+        />
+
+        {/* Half */}
+
+        <line
+          x1={footpitch.halfwayLine.position[0]}
+          y1={footpitch.halfwayLine.position[1]}
+          x2={footpitch.halfwayLine.position[2]}
+          y2={footpitch.halfwayLine.position[3]}
+          strokeWidth={footpitch.halfwayLine.size}
+          stroke={lineColor}
+        />
+
+        <circle
+          cx={footpitch.centerPoint.position[0]}
+          cy={footpitch.centerPoint.position[1]}
+          r={footpitch.centerPoint.size}
+          fill={lineColor}
+        />
+
+        <circle
+          cx={footpitch.centerCircle.position[0]}
+          cy={footpitch.centerCircle.position[1]}
+          r={footpitch.centerCircle.size}
+          stroke={lineColor}
+          fill="none"
+        />
+
+        {/* Corner */}
+
+        {footpitch.cornerArc.position.map((pathData, i) => (
+          <path
+            key={`corner-${i}`}
+            d={pathData}
+            stroke={lineColor}
+            fill="none"
+            strokeWidth={footpitch.cornerArc.size}
+          />
+        ))}
+        {children}
+      </svg>
+    </PitchContext.Provider>
   );
 }

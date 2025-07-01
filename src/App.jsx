@@ -5,7 +5,7 @@ import HeatmapLayer from "./components/layers/HeatMap/HeatmapLayer";
 import heatmapData from "./components/layers/HeatMap/data/heatmap.json";
 import Vertical from "./components/Vertical/Vertical";
 import "./App.css"; // ✅ Corrected import
-import Demo from "./components/Demo";
+import Demo from "./components/DrawPitch copy/Demo";
 
 function App() {
   return (

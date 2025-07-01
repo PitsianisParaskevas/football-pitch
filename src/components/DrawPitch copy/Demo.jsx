@@ -12,11 +12,11 @@ export default function Demo({
   const standardPitch = {
     TOUCH_LINE: 105,
     GOAL_LINE: 68,
-    GOAL_POST: [2, 8],
+    GOAL_POST: [1, 8],
     GOAL_AREA: [6, 20],
     PENALTY_AREA: [18, 44],
     PENALTY_SPOT: 12,
-    PENATLY_ARC: 10,
+    PENALTY_ARC: 10,
     // CORNER_ARC: 5.5,
     CENTER_CIRCLE: 10,
   };
@@ -41,12 +41,17 @@ export default function Demo({
       size: [width, height],
       position: [0, 0],
     },
+    goalPostHome: {
+      type: "rect",
+      size: [standardPitch.GOAL_POST[0], standardPitch.GOAL_POST[1]],
+      position: [0, midY - standardPitch.GOAL_POST[1] / 2],
+    },
     goalAreaHome: {
       type: "rect",
       size: [standardPitch.GOAL_AREA[0], standardPitch.GOAL_AREA[1]],
       position: [0, midY - standardPitch.GOAL_AREA[1] / 2],
     },
-    penatlySpotHome: {
+    penaltySpotHome: {
       type: "circle",
       size: circleRadius,
       position: [standardPitch.PENALTY_SPOT, midY],
@@ -60,15 +65,23 @@ export default function Demo({
       type: "path",
       size: cornerR,
       position: `M  ${standardPitch.PENALTY_AREA[0]} ${
-        midY - standardPitch.PENATLY_ARC
+        midY - standardPitch.PENALTY_ARC
       }
          A
-        ${standardPitch.PENATLY_ARC} ${standardPitch.PENATLY_ARC}
+        ${standardPitch.PENALTY_ARC} ${standardPitch.PENALTY_ARC}
          0 1 1 
-        ${standardPitch.PENALTY_AREA[0]} ${midY + standardPitch.PENATLY_ARC}
+        ${standardPitch.PENALTY_AREA[0]} ${midY + standardPitch.PENALTY_ARC}
         `,
     },
     // Away
+    goalPostAway: {
+      type: "rect",
+      size: [standardPitch.GOAL_POST[0], standardPitch.GOAL_POST[1]],
+      position: [
+        axisX - standardPitch.GOAL_POST[0],
+        midY - standardPitch.GOAL_POST[1] / 2,
+      ],
+    },
     goalAreaAway: {
       type: "rect",
       size: [standardPitch.GOAL_AREA[0], standardPitch.GOAL_AREA[1]],
@@ -77,7 +90,7 @@ export default function Demo({
         midY - standardPitch.GOAL_AREA[1] / 2,
       ],
     },
-    penatlySpotAway: {
+    penaltySpotAway: {
       type: "circle",
       size: circleRadius,
       position: [axisX - standardPitch.PENALTY_SPOT, midY],
@@ -96,13 +109,13 @@ export default function Demo({
       position: `        
         M  
          ${axisX - standardPitch.PENALTY_AREA[0]} 
-         ${midY - standardPitch.PENATLY_ARC}
+         ${midY - standardPitch.PENALTY_ARC}
         A
-         ${standardPitch.PENATLY_ARC} 
-         ${standardPitch.PENATLY_ARC}
+         ${standardPitch.PENALTY_ARC} 
+         ${standardPitch.PENALTY_ARC}
          0 1 0 
          ${axisX - standardPitch.PENALTY_AREA[0]} 
-         ${midY + standardPitch.PENATLY_ARC}        
+         ${midY + standardPitch.PENALTY_ARC}        
         `,
     },
     // Center
@@ -161,12 +174,17 @@ export default function Demo({
       position: [0, 0],
     },
     // Home
+    goalPostHome: {
+      type: "rect",
+      size: [standardPitch.GOAL_POST[1], standardPitch.GOAL_POST[0]],
+      position: [midX - standardPitch.GOAL_POST[1] / 2, 0],
+    },
     goalAreaHome: {
       type: "rect",
       size: [standardPitch.GOAL_AREA[1], standardPitch.GOAL_AREA[0]],
       position: [midX - standardPitch.GOAL_AREA[1] / 2, 0],
     },
-    penatlySpotHome: {
+    penaltySpotHome: {
       type: "circle",
       size: circleRadius,
       position: [midX, standardPitch.PENALTY_SPOT],
@@ -180,13 +198,21 @@ export default function Demo({
       type: "path",
       size: cornerR,
       position: `
-        M ${midX + standardPitch.PENATLY_ARC} ${standardPitch.PENALTY_AREA[0]}
-        A ${standardPitch.PENATLY_ARC} ${standardPitch.PENATLY_ARC}
+        M ${midX + standardPitch.PENALTY_ARC} ${standardPitch.PENALTY_AREA[0]}
+        A ${standardPitch.PENALTY_ARC} ${standardPitch.PENALTY_ARC}
          0 0 1 
-         ${midX - standardPitch.PENATLY_ARC} ${standardPitch.PENALTY_AREA[0]}
+         ${midX - standardPitch.PENALTY_ARC} ${standardPitch.PENALTY_AREA[0]}
         `,
     },
     // Away
+    goalPostAway: {
+      type: "rect",
+      size: [standardPitch.GOAL_POST[1], standardPitch.GOAL_POST[0]],
+      position: [
+        midX - standardPitch.GOAL_POST[1] / 2,
+        axisY - standardPitch.GOAL_POST[0],
+      ],
+    },
     goalAreaAway: {
       type: "rect",
       size: [standardPitch.GOAL_AREA[1], standardPitch.GOAL_AREA[0]],
@@ -195,7 +221,7 @@ export default function Demo({
         axisY - standardPitch.GOAL_AREA[0],
       ],
     },
-    penatlySpotAway: {
+    penaltySpotAway: {
       type: "circle",
       size: circleRadius,
       position: [midX, axisY - standardPitch.PENALTY_SPOT],
@@ -213,13 +239,13 @@ export default function Demo({
       size: cornerR,
       position: `
         M 
-         ${midX + standardPitch.PENATLY_ARC} 
+         ${midX + standardPitch.PENALTY_ARC} 
          ${axisY - standardPitch.PENALTY_AREA[0]}
         A 
-         ${standardPitch.PENATLY_ARC} 
-         ${standardPitch.PENATLY_ARC}
+         ${standardPitch.PENALTY_ARC} 
+         ${standardPitch.PENALTY_ARC}
          0 0 0 
-         ${midX - standardPitch.PENATLY_ARC} 
+         ${midX - standardPitch.PENALTY_ARC} 
          ${axisY - standardPitch.PENALTY_AREA[0]}
         `,
     },
@@ -275,9 +301,9 @@ export default function Demo({
   const footpitch =
     orientation === "horizontal" ? footpitchHorizontal : footpitchVertical;
 
-  console.log(`${orientation}: midY: ${midY}, midX: ${midX}`); // Now this logs "horizontal" if no prop is passed
+  
   return (
-    <svg width={width} height={height} style={{ backgroundColor: grassColor }}>
+    <svg width={axisX} height={axisY} style={{ backgroundColor: grassColor }}>
       {/* Outline */}
       <rect
         width={footpitch.pitch.size[0]}
@@ -291,6 +317,14 @@ export default function Demo({
 
       {/* Areas */}
       {/* Home */}
+      <rect
+        width={footpitch.goalPostHome.size[0]}
+        height={footpitch.goalPostHome.size[1]}
+        x={footpitch.goalPostHome.position[0]}
+        y={footpitch.goalPostHome.position[1]}
+        stroke={"#000"}
+        strokeWidth={lineWidth}
+      />
       <rect
         width={footpitch.goalAreaHome.size[0]}
         height={footpitch.goalAreaHome.size[1]}
@@ -312,9 +346,9 @@ export default function Demo({
       />
 
       <circle
-        cx={footpitch.penatlySpotHome.position[0]}
-        cy={footpitch.penatlySpotHome.position[1]}
-        r={footpitch.penatlySpotHome.size}
+        cx={footpitch.penaltySpotHome.position[0]}
+        cy={footpitch.penaltySpotHome.position[1]}
+        r={footpitch.penaltySpotHome.size}
         fill={lineColor}
       />
 
@@ -326,6 +360,14 @@ export default function Demo({
       />
 
       {/* Away */}
+      <rect
+        width={footpitch.goalPostAway.size[0]}
+        height={footpitch.goalPostAway.size[1]}
+        x={footpitch.goalPostAway.position[0]}
+        y={footpitch.goalPostAway.position[1]}
+        stroke={"#000"}
+        strokeWidth={lineWidth}
+      />
       <rect
         width={footpitch.goalAreaAway.size[0]}
         height={footpitch.goalAreaAway.size[1]}
@@ -347,9 +389,9 @@ export default function Demo({
       />
 
       <circle
-        cx={footpitch.penatlySpotAway.position[0]}
-        cy={footpitch.penatlySpotAway.position[1]}
-        r={footpitch.penatlySpotAway.size}
+        cx={footpitch.penaltySpotAway.position[0]}
+        cy={footpitch.penaltySpotAway.position[1]}
+        r={footpitch.penaltySpotAway.size}
         fill={lineColor}
       />
 
@@ -388,33 +430,15 @@ export default function Demo({
 
       {/* Corner */}
 
-      <path
-        d={footpitch.cornerArc.position[0]}
-        stroke={lineColor}
-        fill="none"
-        strokeWidth={footpitch.cornerArc.position}
-      />
-
-      <path
-        d={footpitch.cornerArc.position[1]}
-        stroke={lineColor}
-        fill="none"
-        strokeWidth={footpitch.cornerArc.position}
-      />
-
-      <path
-        d={footpitch.cornerArc.position[2]}
-        stroke={lineColor}
-        fill="none"
-        strokeWidth={footpitch.cornerArc.position}
-      />
-
-      <path
-        d={footpitch.cornerArc.position[3]}
-        stroke={lineColor}
-        fill="none"
-        strokeWidth={footpitch.cornerArc.position}
-      />
+      {footpitch.cornerArc.position.map((pathData, i) => (
+        <path
+          key={`corner-${i}`}
+          d={pathData}
+          stroke={lineColor}
+          fill="none"
+          strokeWidth={footpitch.cornerArc.size}
+        />
+      ))}
     </svg>
   );
 }

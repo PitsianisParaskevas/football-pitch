@@ -1,0 +1,20 @@
+export default function calculatePitchSize(
+  width,
+  height,
+  orientation,
+  fullPitch,
+  formationParts
+) {
+  const orientWidth = orientation === "horizontal" ? width : height;
+  const orientHeight = orientation === "horizontal" ? height : width;
+
+  const axisX = fullPitch ? orientWidth : orientWidth / 2;
+  const axisY = orientHeight;
+  const zoneX = axisX / formationParts.length;
+
+  return {
+    axisX,
+    axisY,
+    zoneX
+  };
+}

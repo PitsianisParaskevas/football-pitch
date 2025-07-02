@@ -52,8 +52,6 @@ export default function DrawPitch({
     CORNER_ARC: scaleWidth * standardPitch.CORNER_ARC,
   };
 
-  console.log("scalePitch", scalePitch);
-
   const orientWidth =
     orientation === "horizontal" ? scalePitch.TOUCH_LINE : scalePitch.GOAL_LINE;
   const orientHeight =

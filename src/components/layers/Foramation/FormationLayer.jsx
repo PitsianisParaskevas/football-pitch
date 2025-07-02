@@ -11,6 +11,8 @@ const FormationLayer = ({
   direction,
   formationWidthRatio = 1,
 }) => {
+
+  
   const players = calculateFormationPositions({
     formation,
     isHomeTeam,

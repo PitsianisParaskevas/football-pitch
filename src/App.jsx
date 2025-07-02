@@ -19,23 +19,7 @@ function App() {
           lineWidth={3}
           goalPostColor="#fff"
           cornerR={3}
-        >
-          <TeamFormationLayer
-            color="#3333cc"
-            radius={8}
-            formation="4-4-2"
-            isHomeTeam={true}
-            fullPitch={false}
-          />
-          <HeatmapLayer
-            data={heatmapData.heatmap}
-            color="#F7A82D"
-            radius={10}
-            opacity={0.5}
-          />
-        </DrawPitch>
-        {/* <TeamFormation formation="4-3-3" isHomeTeam={false} />  */}
-        {/* </DrawPitch> */}
+        ></DrawPitch>
       </div>
     </div>
   );

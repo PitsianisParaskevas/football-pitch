@@ -6,7 +6,7 @@ import calculatePitchSize from "../utils/calculatePitchSize";
 export default function TeamFormationLayer({
   color,
   radius = 8,
-  formation = "4-3-3",
+  formation,
   isHomeTeam = true,
   fullPitch = false,
   verticalSpacingRatio = 1.5,

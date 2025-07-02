@@ -6,7 +6,8 @@
   "module": "dist/draw-football-pitch.es.js",
   "types": "dist/index.d.ts",
   "files": [
-    "dist"
+    "dist",
+    "assets"
   ],
   "exports": {
     ".": {

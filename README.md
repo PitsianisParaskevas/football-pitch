@@ -1,261 +1,156 @@
-# React + Vite
+# DrawFootballPitch
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## 🧠 Overview
 
-Currently, two official plugins are available:
+`draw-football-pitch-library` is a React component library designed to visualize football (soccer) data. It provides scalable and customizable components to render a full or half football pitch, team formations, and heatmaps.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
-
-# DrawPitch Component
-
-## ✨ Purpose
-
-`DrawPitch` is a reusable and customizable React component for rendering a scalable football pitch (soccer field) using SVG. It supports horizontal and vertical orientations, real-world proportions, customizable styling, and dynamic child layers like team formations or heatmaps.
+Whether you're building a match dashboard, tactical analysis tool, or visual story, this library helps you bring football data to life using SVG and context-aware rendering.
 
 ---
 
-## 🌍 Geometry and Scaling
+## ✨ Features
 
-The pitch is based on standard FIFA dimensions:
+- **Realistic, scalable football pitch** (horizontal or vertical orientation)
+- **Team formations overlay** using flexible layout logic
+- **Heatmap visualization** with SVG circle overlays
+- **Support for half-pitch and full-pitch views**
+- **Context-based geometry and orientation API**
 
-- **TOUCH_LINE (length)**: 105 meters
-- **GOAL_LINE (width)**: 68 meters
+TeamFormationLayer
 
-These are scaled to fit the `width` and `height` props using internal scale factors:
+The `DrawPitch` component is the foundation of the library. It renders a scalable football pitch using SVG and provides pitch geometry and orientation through React Context to child components like formations or heatmaps.
+
+### 📐 Props
+
+| Prop            | Type          | Default        | Description                                                     |
+| --------------- | ------------- | -------------- | --------------------------------------------------------------- |
+| `width`         | number/string | `800`          | Total pitch width in pixels                                     |
+| `height`        | number/string | `500`          | Total pitch height in pixels                                    |
+| `orientation`   | string        | `"horizontal"` | Pitch direction: `"horizontal"` or `"vertical"`                 |
+| `grassColor`    | string        | `"#007A57"`    | Background color of the pitch                                   |
+| `lineColor`     | string        | `"#fff"`       | Color for field lines                                           |
+| `lineWidth`     | number        | `1`            | Width of all field lines                                        |
+| `goalPostColor` | string        | `"#fff"`       | Color of the goal area                                          |
+| `cornerR`       | number        | `1`            | Radius of corner arcs                                           |
+| `children`      | ReactNode     | `null`         | Additional SVG elements or overlay components (formations etc.) |
+
+---
+
+### 🧠 Context API
+
+The component exposes internal dimensions via `PitchContext`, accessible by any child:
 
 ```js
-scaleWidth = width / 105;
-scaleHeight = height / 68;
+const { width, height, orientation, axisX, axisY, scalePitch } =
+  useContext(PitchContext);
 ```
-
-Every field element (goal, penalty box, arcs, etc.) is then scaled accordingly.
-
-Orientation affects axis alignment:
-
-- **Horizontal**: Length runs left to right
-- **Vertical**: Length runs top to bottom
-
-The pitch elements are organized into structured objects per orientation.
-
----
-
-## ⚖️ Props
-
-| Prop            | Type          | Default        | Description                                                   |
-| --------------- | ------------- | -------------- | ------------------------------------------------------------- |
-| `width`         | number/string | `800`          | Total SVG width in pixels                                     |
-| `height`        | number/string | `500`          | Total SVG height in pixels                                    |
-| `orientation`   | string        | `"horizontal"` | Orientation of pitch (`"horizontal"` or `"vertical"`)         |
-| `grassColor`    | string        | `"#007A57"`    | Pitch background color                                        |
-| `lineColor`     | string        | `"#fff"`       | Line color for field markings                                 |
-| `lineWidth`     | number        | `1`            | Thickness of lines                                            |
-| `goalPostColor` | string        | `"#fff"`       | Fill color for goal posts                                     |
-| `cornerR`       | number        | `1`            | Corner arc stroke width                                       |
-| `children`      | ReactNode     | `null`         | Additional layers (e.g. formations, heatmaps) rendered on top |
-
----
-
-## 🔍 Features
-
-- SVG-based rendering
-- Responsive geometry using scale ratios
-- Orientation-aware rendering logic
-- Built-in half and full pitch logic
-- Supports overlays like:
-
-  - `TeamFormationLayer`
-  - `HeatmapLayer`
-  - Custom SVG overlays
-
-- Provides pitch context to children using `PitchContext`
-
----
-
-## 🔹 Usage Example
 
 ```jsx
 import DrawPitch from "./components/DrawPitch/DrawPitch";
-import TeamFormation from "./components/layers/TeamFormation/TeamFormationLayer";
 
-<DrawPitch width={800} height={500} orientation="horizontal">
-  <TeamFormation formation="4-3-3" isHomeTeam={true} />
-  <TeamFormation formation="4-4-2" isHomeTeam={false} color="#FF4444" />
-</DrawPitch>;
+<DrawPitch
+  width={800}
+  height={500}
+  orientation="horizontal"
+  grassColor="#007A57"
+  lineColor="#fff"
+  lineWidth={3}
+  goalPostColor="#fff"
+  cornerR={3}
+/>;
 ```
 
----
+This is the default appearance of the `DrawPitch` component:
 
-## ⚖️ Pitch Context API
-
-The `DrawPitch` component provides the following values through `PitchContext`:
-
-```js
-{
-  width, // Width in px
-    height, // Height in px
-    orientation, // "horizontal" or "vertical"
-    axisX, // Width depending on orientation
-    axisY, // Height depending on orientation
-    scalePitch; // Scaled pitch element sizes
-}
-```
-
-You can access this inside any child component:
-
-```js
-const { width, height, orientation } = useContext(PitchContext);
-```
-
----
-
-## ⚠️ Tips
-
-- Always wrap custom SVG layers inside `DrawPitch`
-- Use `orientation` to conditionally flip layout logic
-- Use pitch context values to calculate player or heatmap positions
-- Keep proportions realistic by using standard field values
+![DrawPitch Default](./src/assets/images/DrawPitchDefault.png)
 
 ---
 
 # TeamFormationLayer
 
-## 📝 Overview
+The `TeamFormationLayer` component renders a football team’s formation directly on the pitch. It uses the context from DrawPitch to calculate player positions based on the provided formation string, pitch size, and orientation.
 
-`TeamFormationLayer` is a React component that renders a football team's formation on an SVG pitch using context provided by `DrawPitch`. It supports flexible geometry, automatic orientation handling, and multiple display modes (half pitch or full pitch).
+### 📐 Props
 
----
-
-## ⚙️ Geometry System
-
-The football pitch is divided into logical **zones**, each representing one line in the formation (e.g. goalkeeper, defenders, midfielders, forwards).
-
-### How it Works:
-
-- The pitch is split horizontally or vertically based on orientation.
-- `zoneX` defines the width of each formation column.
-- Vertical spacing is automatically calculated to avoid overlapping.
-- Positioning (cx/cy) is orientation-aware and uses the pitch dimensions from context.
-
-### Geometry Formulae:
-
-```js
-const cx = zoneX * i + zoneX / 2 - radius + offsetX;
-const cy = spacing * (j + 1) + j * diameter + radius;
-```
-
-Where `offsetX = 0` for home team on half pitch and `offsetX = axisX` for away team.
+| Prop         | Type      | Default     | Description                                                             |
+| ------------ | --------- | ----------- | ----------------------------------------------------------------------- |
+| `formation`  | `string`  | `"4-3-3"`   | Formation string (excluding GK), e.g. `"4-4-2"`, `"3-5-2"`              |
+| `isHomeTeam` | `boolean` | `true`      | If `true`, renders team on the left/top side of the pitch               |
+| `color`      | `string`  | `"#3366FF"` | Fill color for player circles (defaults to blue/red based on home/away) |
+| `radius`     | `number`  | `8`         | Radius (in px) for each player circle                                   |
+| `fullPitch`  | `boolean` | `false`     | If `true`, renders players across the full pitch instead of half        |
 
 ---
-
-## 📞 Props
-
-| Prop                   | Type      | Default     | Description                                                   |
-| ---------------------- | --------- | ----------- | ------------------------------------------------------------- |
-| `formation`            | `string`  | `"4-3-3"`   | Formation string (GK added automatically).                    |
-| `isHomeTeam`           | `boolean` | `true`      | Renders team on left/top (home) or right/bottom (away).       |
-| `fullPitch`            | `boolean` | `false`     | Whether to render formation across the full pitch.            |
-| `color`                | `string`  | `"#FF4444"` | Player circle fill color. Defaults to red/blue based on team. |
-| `radius`               | `number`  | `8`         | Radius of each player circle.                                 |
-| `verticalSpacingRatio` | `number`  | `1.5`       | Controls vertical distance between players.                   |
-
----
-
-## ✍️ Usage Example
 
 ```jsx
-import DrawPitch from "./DrawPitch";
-import TeamFormationLayer from "./layers/TeamFormationLayer";
+import TeamFormationLayer from "./components/layers/TeamFormation/TeamFormationLayer";
 
-<DrawPitch width={800} height={500} orientation="horizontal">
-  <TeamFormationLayer
-    formation="4-3-3"
-    isHomeTeam={true}
-    color="#3366FF"
-    radius={10}
-  />
-  <TeamFormationLayer
-    formation="4-4-2"
-    isHomeTeam={false}
-    color="#FF5555"
-    fullPitch={false}
-  />
-</DrawPitch>;
+<TeamFormationLayer
+  formation="4-4-2"
+  isHomeTeam={true}
+  color="#3333cc"
+  radius={8}
+  fullPitch={false}
+/>;
 ```
 
-### Full-Pitch Example:
+This is the appearance of the `TeamFormationLayer` component:
+
+![TeamFormationLayer](./src/assets/images/TeamFormationDefault.png)
+
+---
+
+# HeatmapLayer
+
+he `HeatmapLayer` component renders heatmap data as SVG circles on top of the football pitch. It takes an array of `{ x, y }` points (as percentages of pitch dimensions) and visualizes them using customizable color, radius, and opacity.
+
+It uses the pitch context from `DrawPitch` to ensure accurate scaling and orientation for each heat point.
+
+Use this component to visualize:
+
+- Player activity zones
+- Ball touch locations
+- Tactical intensity areas
+
+### 📐 Props
+
+| Prop      | Type     | Default      | Description                                                                       |
+| --------- | -------- | ------------ | --------------------------------------------------------------------------------- |
+| `data`    | `Array`  | **required** | Array of heat points `{ x, y, value? }` where `x` and `y` are percentages (0–100) |
+| `color`   | `string` | `"#F7A82D"`  | Fill color for heatmap circles                                                    |
+| `radius`  | `number` | `10`         | Radius (in px) for each heat circle                                               |
+| `opacity` | `number` | `0.5`        | Opacity of the heat circles (0 to 1)                                              |
+
+---
 
 ```jsx
-<DrawPitch width={800} height={500} orientation="vertical">
-  <TeamFormationLayer formation="3-5-2" isHomeTeam={true} fullPitch={true} />
-  <TeamFormationLayer formation="4-3-3" isHomeTeam={false} fullPitch={true} />
-</DrawPitch>
+import HeatmapLayer from "./components/layers/HeatMap/HeatmapLayer";
+
+<HeatmapLayer data={heatmapData} color="#F7A82D" radius={10} opacity={0.5} />;
 ```
 
-## 🔥 `HeatmapLayer` – Visualize Activity with Heat Circles
+This is the appearance of the `HeatmapLayer` component:
 
-The `HeatmapLayer` component overlays heatmap points on the football pitch using `<circle>` SVG elements. It dynamically scales positions based on pitch size and orientation using the `PitchContext`.
-
-### ✅ When to Use
-
-- To visualize player activity zones.
-- To overlay positional heat data on top of the pitch.
-- For debugging or analysis of player movement intensity.
+![HeatmapLayer](./src/assets/images/HeatmapLayerDefautl.png)
 
 ---
 
-### 📦 Props
+## 🖼️ Examples
 
-| Prop      | Type     | Default      | Description                                                            |
-| --------- | -------- | ------------ | ---------------------------------------------------------------------- |
-| `data`    | `Array`  | **required** | Array of objects with `{ x, y, value? }` representing positions (in %) |
-| `color`   | `string` | `#F7A82D`    | Fill color of each heat circle                                         |
-| `radius`  | `number` | `10`         | Radius of each heat circle                                             |
-| `opacity` | `number` | `0.5`        | Opacity of each heat circle                                            |
+Here are additional visual examples using the `DrawPitch` system:
 
----
+### ✅ Basic Pitch Rendering
 
-### 📐 Data Format
+![DrawPitch](./src/assets/images/DrawPitch.png)
 
-Each point in the `data` array should look like:
+### 🔷 Team Formation Example
 
-```js
-{
-  x: 45,   // percentage from left (0-100)
-  y: 30,   // percentage from bottom (0-100)
-  value: 1 // (optional) can be used for weighting in custom implementations
-}
+![TeamFormation](./src/assets/images/TeamFormation.png)
+
+### 🔥 Heatmap Overlay Example
+
+![Heatmap](./src/assets/images/Heatmap.png)
 
 ---
 
-## 🧠 Best Practices
-
-- Always place `TeamFormationLayer` **inside `DrawPitch`**, which provides essential pitch geometry via React Context.
-- Adjust `verticalSpacingRatio` for visual spacing tuning.
-- Use `fullPitch={true}` only when both teams are shown on the field.
-- The component auto-adjusts to `horizontal` or `vertical` orientation.
-
----
-
-## 📄 Related Utilities
-
-- `calculateTotalPlayerFromFormation` — parses the formation string (e.g. "4-3-3") into `[1, 4, 3, 3]`
-- `calculatePitchSize` — computes pitch zone sizes and axis based on props and orientation.
-- `PitchContext` — context provider from `DrawPitch` that shares pitch size and settings.
-
----
-
-## 📈 Debug Tips
-
-- Use `console.log(players)` inside the loop to inspect circle coordinates.
-- Use `color` props to distinguish multiple teams.
-- Orientation issues? Double-check `orientation` and inspect flipped `cx/cy` logic.
-
----
-
-Enjoy visualizing dynamic football formations!
-```
+Enjoy visualizing dynamic football formations and match data with precision and style! ⚽

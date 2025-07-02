@@ -2,13 +2,16 @@
   "name": "draw-football-pitch-library",
   "version": "1.0.0",
   "description": "A React component library to draw customizable football (soccer) pitches.",
-  "main": "dist/index.js",
-  "module": "dist/index.js",
+  "main": "dist/draw-football-pitch.umd.js",
+  "module": "dist/draw-football-pitch.es.js",
   "types": "dist/index.d.ts",
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "exports": {
     ".": {
-      "import": "./dist/index.js",
+      "import": "./dist/draw-football-pitch.es.js",
+      "require": "./dist/draw-football-pitch.umd.js",
       "types": "./dist/index.d.ts"
     }
   },
@@ -44,6 +47,7 @@
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.19",
     "globals": "^16.0.0",
-    "vite": "^6.3.1"
+    "vite": "^6.3.5",
+    "vite-plugin-dts": "^4.5.4"
   }
 }

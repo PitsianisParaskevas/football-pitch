@@ -3,7 +3,7 @@ import DrawPitch from "./components/DrawPitch/DrawPitch";
 import HeatmapLayer from "./components/layers/HeatMap/HeatmapLayer";
 import heatmapData from "./components/layers/HeatMap/data/heatmap.json";
 import "./App.css"; // ✅ Corrected import
-import TeamFormation from "./components/layers/TeamFormation/TeamFormatinLayer";
+import TeamFormation from "./components/layers/TeamFormation/TeamFormationLayer";
 
 function App() {
   return (

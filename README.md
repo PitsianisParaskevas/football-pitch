@@ -14,9 +14,10 @@ Whether you're building a match dashboard, tactical analysis tool, or visual sto
 - **Team formations overlay** using flexible layout logic
 - **Heatmap visualization** with SVG circle overlays
 - **Support for half-pitch and full-pitch views**
-- **Context-based geometry and orientation API**
 
-TeamFormationLayer
+---
+
+# TeamFormationLayer
 
 The `DrawPitch` component is the foundation of the library. It renders a scalable football pitch using SVG and provides pitch geometry and orientation through React Context to child components like formations or heatmaps.
 
@@ -35,8 +36,6 @@ The `DrawPitch` component is the foundation of the library. It renders a scalabl
 | `children`      | ReactNode     | `null`         | Additional SVG elements or overlay components (formations etc.) |
 
 ---
-
-### 🧠 Context API
 
 The component exposes internal dimensions via `PitchContext`, accessible by any child:
 

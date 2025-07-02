@@ -122,7 +122,6 @@ const { width, height, orientation } = useContext(PitchContext);
 
 ---
 
-
 # TeamFormationLayer
 
 ## 📝 Overview
@@ -197,6 +196,40 @@ import TeamFormationLayer from "./layers/TeamFormationLayer";
 </DrawPitch>
 ```
 
+## 🔥 `HeatmapLayer` – Visualize Activity with Heat Circles
+
+The `HeatmapLayer` component overlays heatmap points on the football pitch using `<circle>` SVG elements. It dynamically scales positions based on pitch size and orientation using the `PitchContext`.
+
+### ✅ When to Use
+
+- To visualize player activity zones.
+- To overlay positional heat data on top of the pitch.
+- For debugging or analysis of player movement intensity.
+
+---
+
+### 📦 Props
+
+| Prop      | Type     | Default      | Description                                                            |
+| --------- | -------- | ------------ | ---------------------------------------------------------------------- |
+| `data`    | `Array`  | **required** | Array of objects with `{ x, y, value? }` representing positions (in %) |
+| `color`   | `string` | `#F7A82D`    | Fill color of each heat circle                                         |
+| `radius`  | `number` | `10`         | Radius of each heat circle                                             |
+| `opacity` | `number` | `0.5`        | Opacity of each heat circle                                            |
+
+---
+
+### 📐 Data Format
+
+Each point in the `data` array should look like:
+
+```js
+{
+  x: 45,   // percentage from left (0-100)
+  y: 30,   // percentage from bottom (0-100)
+  value: 1 // (optional) can be used for weighting in custom implementations
+}
+
 ---
 
 ## 🧠 Best Practices
@@ -225,3 +258,4 @@ import TeamFormationLayer from "./layers/TeamFormationLayer";
 ---
 
 Enjoy visualizing dynamic football formations!
+```

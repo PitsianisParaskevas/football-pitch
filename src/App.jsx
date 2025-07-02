@@ -9,22 +9,11 @@ function App() {
   return (
     <div style={{ padding: "2rem" }}>
       <DrawPitch width="800" height="500">
-        <TeamFormation
-          formation="3-5-2"
-          isHomeTeam={false}
-          radius={10}
-          fullPitch={true}
-        />
-        {/* <TeamFormation formation="3-5-2" isHomeTeam={false} radius={10} /> */}
+        <HeatmapLayer data={heatmapData.heatmap} />
       </DrawPitch>
 
       <DrawPitch width="800" height="500" orientation="vertical">
-        <TeamFormation
-          formation="3-5-2"
-          isHomeTeam={false}
-          radius={10}
-          fullPitch={true}
-        />
+        <HeatmapLayer data={heatmapData.heatmap} />
       </DrawPitch>
     </div>
   );

@@ -1,19 +1,26 @@
-// src/components/layers/Heatmap/HeatmapLayer.jsx
-import React from "react";
+import React, { useContext } from "react";
+import { PitchContext } from "../../DrawPitch/DrawPitch";
 
 const HeatmapLayer = ({
   data,
-  width = 800,
-  height = 500,
-  color = "red",
-  radius = 20,
+  color = "#F7A82D",
+  radius = 10,
   opacity = 0.5,
 }) => {
+  const { width, height, orientation } = useContext(PitchContext);
+
   return (
     <>
       {data.map((point, index) => {
-        const cx = (point.x / 100) * width;
-        const cy = height - (point.y / 100) * height;
+        let cx, cy;
+
+        if (orientation === "horizontal") {
+          cx = (point.x / 100) * width;
+          cy = height - (point.y / 100) * height;
+        } else {
+          cx = height - (point.y / 100) * height;
+          cy = (point.x / 100) * width;
+        }
 
         return (
           <circle

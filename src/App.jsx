@@ -10,19 +10,20 @@ function App() {
     <div style={{ padding: "2rem" }}>
       <DrawPitch width="800" height="500">
         <TeamFormation
-          formation="4-3-3"
+          formation="3-5-2"
           isHomeTeam={false}
-          color="#3366FF"
           radius={10}
+          fullPitch={true}
         />
+        {/* <TeamFormation formation="3-5-2" isHomeTeam={false} radius={10} /> */}
       </DrawPitch>
 
       <DrawPitch width="800" height="500" orientation="vertical">
         <TeamFormation
-          formation="4-3-3"
+          formation="3-5-2"
           isHomeTeam={false}
-          color="#3366FF"
           radius={10}
+          fullPitch={true}
         />
       </DrawPitch>
     </div>

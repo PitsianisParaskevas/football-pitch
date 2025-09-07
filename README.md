@@ -1,6 +1,7 @@
 # DrawFootballPitch
 
 ## 🧠 Overview
+[View on NPM](https://www.npmjs.com/package/draw-football-pitch-library)
 
 `draw-football-pitch-library` is a React component library designed to visualize football (soccer) data. It provides scalable and customizable components to render a full or half football pitch, team formations, and heatmaps.
 
